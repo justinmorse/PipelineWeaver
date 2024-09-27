@@ -27,7 +27,7 @@ public class AdoYamlBuilder
 
         var split = line.SplitLinesAtNewLine();
         var indentionStr = new string(' ', indention);
-        split.ForEach(l => _sb.AppendLine($"{indentionStr}{line}"));
+        split.ForEach(l => _sb.AppendLine($"{indentionStr}{l}"));
     }
 
     public void AppendEmptyLine()

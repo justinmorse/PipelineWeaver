@@ -46,6 +46,7 @@ public class AdoPipelineSerializer : IAdoYamlSectionSerializer
     internal void AppendTriggers(AdoPipeline pipeline, int startingIndent)
     {
         _builder.Append(pipeline.Triggers, startingIndent);
+        _builder.AppendEmptyLine();
     }
 
     internal void AppendResources(AdoPipeline pipeline, int startingIndent)
