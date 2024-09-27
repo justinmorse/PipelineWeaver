@@ -38,29 +38,30 @@ public class AdoPipelineSerializer : IAdoYamlSectionSerializer
     {
         if (pipeline.Variables?.Variables.Count > 0)
         {
-            _builder.Append(pipeline.Variables, startingIndent);
+            _builder.Append(startingIndent, pipeline.Variables);
             _builder.AppendEmptyLine();
         }
     }
 
     internal void AppendTriggers(AdoPipeline pipeline, int startingIndent)
     {
-        _builder.Append(pipeline.Triggers, startingIndent);
+        _builder.Append(startingIndent, pipeline.Triggers);
         _builder.AppendEmptyLine();
     }
+
 
     internal void AppendResources(AdoPipeline pipeline, int startingIndent)
     {
         if (pipeline.Resources?.Resources?.Count > 0)
         {
-            _builder.Append(pipeline.Resources, startingIndent);
+            _builder.Append(startingIndent, pipeline.Resources);
             _builder.AppendEmptyLine();
         }
     }
 
     internal void AppendStages(AdoPipeline pipeline, int startingIndent)
     {
-        _builder.Append(pipeline.Stages, startingIndent);
+        _builder.Append(startingIndent, pipeline.Stages);
         _builder.AppendEmptyLine();
 
     }

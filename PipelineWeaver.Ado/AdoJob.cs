@@ -43,7 +43,7 @@ public class AdoDeploymentJob : AdoJobBase
 public class AdoTemplateJob : AdoJobBase
 {
     public required string Template { get; set; }
-    public List<string>? Parameters { get; set; }
+    public AdoParameterContainer? Parameters { get; set; }
 }
 
 public class AdoUses

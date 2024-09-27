@@ -67,7 +67,7 @@ namespace PipelineWeaver.Core.Transpiler.Ado.Yaml.SectionSerializers
             if (!string.IsNullOrWhiteSpace(stage.DisplayName))
                 _builder.AppendLine(startingIndent + 2, "displayName: " + stage.DisplayName);
             if (stage.Variables is not null)
-                _builder.Append(stage.Variables, startingIndent);
+                _builder.Append(startingIndent, stage.Variables);
             if (!string.IsNullOrWhiteSpace(stage.LockBehavior))
                 _builder.AppendLine(startingIndent + 2, "lockBehavior: " + stage.LockBehavior);
             if (!string.IsNullOrWhiteSpace(stage.Trigger))
@@ -77,9 +77,9 @@ namespace PipelineWeaver.Core.Transpiler.Ado.Yaml.SectionSerializers
             if (!string.IsNullOrWhiteSpace(stage.TemplateContext))
                 _builder.AppendLine(startingIndent + 2, "templateContext: " + stage.TemplateContext);
             if (stage.Pools is not null)
-                _builder.Append(stage.Pools, startingIndent);
+                _builder.Append(startingIndent, stage.Pools);
             if (stage.Jobs?.Jobs.Count > 0)
-                _builder.Append(stage.Jobs, startingIndent);
+                _builder.Append(startingIndent, stage.Jobs);
 
         }
 

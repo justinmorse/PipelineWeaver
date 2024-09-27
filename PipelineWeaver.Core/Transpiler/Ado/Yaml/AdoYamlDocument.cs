@@ -16,7 +16,7 @@ public class AdoYamlDocument : IYamlDocument
         if (pipelineObj == null)
             throw new ArgumentException(nameof(pipelineObj));
 
-        Builder.Append(pipelineObj, 0);
+        Builder.Append(0, pipelineObj);
     }
 
     public void BuildTemplate(object pipeline)

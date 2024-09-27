@@ -54,9 +54,10 @@ namespace PipelineWeaver.Core.Transpiler.Ado.Yaml.SectionSerializers
         private void AppendJobTemplate(AdoTemplateJob job, int startingIndent)
         {
             _builder.AppendLine(startingIndent + 2, "- template: " + job.Template);
-            if (job.Parameters?.Count > 0)
+            if (job.Parameters?.Parameters.Count > 0)
             {
-                _builder.AppendList("parameters", 4 + startingIndent, job.Parameters);
+                _builder.AppendLine(startingIndent + 4, "parameters:");
+                _builder.Append(4 + startingIndent, job.Parameters);
             }
         }
 
@@ -64,7 +65,7 @@ namespace PipelineWeaver.Core.Transpiler.Ado.Yaml.SectionSerializers
         {
             _builder.AppendLine(startingIndent + 2, "- deployment: " + job.Deployment);
             AppendBaseFields(job, startingIndent);
-            _builder.Append(job.Strategy, startingIndent + 4);
+            _builder.Append(startingIndent + 4, job.Strategy);
         }
 
         private void AppendBasicJob(AdoJob job, int startingIndent)
@@ -83,7 +84,7 @@ namespace PipelineWeaver.Core.Transpiler.Ado.Yaml.SectionSerializers
             if (job.Steps?.Steps.Count() > 0)
             {
                 _builder.AppendLine(startingIndent + 4, "steps:");
-                _builder.Append(job.Steps, startingIndent + 6);
+                _builder.Append(startingIndent + 6, job.Steps);
             }
         }
 
@@ -103,7 +104,7 @@ namespace PipelineWeaver.Core.Transpiler.Ado.Yaml.SectionSerializers
             if (job.Variables is not null)
             {
                 _builder.AppendLine(startingIndent + 4, "variables: ");
-                _builder.Append(job.Variables, startingIndent + 6);
+                _builder.Append(startingIndent + 6, job.Variables);
             }
             if (job.Pool is not null)
                 _builder.AppendLine(startingIndent + 4, "pool: " + job.Pool);

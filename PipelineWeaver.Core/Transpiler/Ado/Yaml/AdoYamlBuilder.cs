@@ -14,7 +14,7 @@ public class AdoYamlBuilder
     {
         _sb = new StringBuilder();
     }
-    public void Append(AdoSectionBase? section, int startingIndent)
+    public void Append(int startingIndent, AdoSectionBase? section)
     {
         if (section is null) return;
 

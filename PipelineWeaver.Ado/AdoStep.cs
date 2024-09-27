@@ -103,11 +103,11 @@ public class AdoScriptStep : AdoStepBase
 public class AdoTaskStep : AdoStepBase
 {
     public required string Task { get; set; }
-    public Dictionary<string, object>? Inputs { get; set; }
+    public Dictionary<string, string>? Inputs { get; set; }
 }
 
 public class AdoTemplateStep : AdoStepBase
 {
     public required string Template { get; set; }
-    public Dictionary<string, object>? Parameters { get; set; }
+    public AdoParameterContainer? Parameters { get; set; }
 }
