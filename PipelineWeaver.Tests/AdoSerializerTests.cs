@@ -53,11 +53,46 @@ public class AdoSerializerTests
             new AdoNamedPool(){Name = "Pool"}
         };
 
-        var jobs = new AdoJobContainer();
+        var weirdObj = new
+        {
+            Field1 = "Value1",
+            Field2 = "Value2",
+            Field3 = new
+            {
+                Field3_1 = "Value3_1",
+                Field3_2 = true,
+                Field3_3 = new
+                {
+                    Field3_3_1 = "Value3_3_1",
+                    Field3_3_2 = true
+                }
+            }
+        };
+
+        var adoJobParameters = new List<AdoParameterBase>()
+        {
+            new AdoBoolParameter(){Name = "Bool", Value = true},
+            new AdoStringParameter(){Name = "String", Value = "Value"},
+            new AdoObjectParameter<List<string>>(){Name = "ListString", Value = new List<string>(){"one","two"}},
+            new AdoObjectParameter<List<object>>(){Name = "ListObj", Value= new List<object>(){weirdObj, weirdObj}},
+            new AdoObjectParameter<Dictionary<string, string>>(){Name = "StringDict", Value = new Dictionary<string, string>(){{"key1","value1"},{"key2","value2"}}},
+            new AdoObjectParameter<Dictionary<string, bool>>(){Name = "boolDict", Value = new Dictionary<string, bool>(){{"key1",true},{"key2",true}}},
+            new AdoObjectParameter<Dictionary<string, object>>(){Name = "objDict", Value = new Dictionary<string, object>(){{"key1",weirdObj},{"key2",weirdObj}}},
+        };
+
+        var jobSteps = new List<AdoStepBase>(){
+            new AdoScriptStep(){Script = "Script"},
+            new AdoTemplateStep(){Template = "Template", Parameters = new AdoParameterContainer() { Parameters = adoJobParameters }},
+        };
+
+        var jobs = new List<AdoJobBase>(){
+            new AdoJob(){Job = "Job", Condition = "Condition", DependsOn = new List<string>(){"Depend1","Depend2"}, DisplayName = "DisplayName", Steps = new AdoStepContainer{Steps = jobSteps}},
+            new AdoTemplateJob(){Template = "Template", Condition = "Condition", Parameters = new AdoParameterContainer() { Parameters = adoJobParameters }},
+        };
 
         var stages = new List<AdoStageBase>()
         {
-            new AdoStage(){Stage = "Stage", Condition = "Condition", DependsOn = new List<string>(){"Depend1","Depend2"}, DisplayName = "DisplayName", IsSkippable = true, Jobs = jobs, LockBehavior = "LockBehavior", TemplateContext = "TemplateContext", Trigger = "Trigger", Variables = new AdoVariableContainer() { Variables = new List<AdoVariableBase>() { new AdoNameVariable() { Name = "Name", Value = "Value" } } }, Pools = new AdoPoolContainer() { Pools = pools }},
+            new AdoStage(){Stage = "Stage", Condition = "Condition", DependsOn = new List<string>(){"Depend1","Depend2"}, DisplayName = "DisplayName", IsSkippable = true, Jobs = new AdoJobContainer(){Jobs = jobs}, LockBehavior = "LockBehavior", TemplateContext = "TemplateContext", Trigger = "Trigger", Variables = new AdoVariableContainer() { Variables = new List<AdoVariableBase>() { new AdoNameVariable() { Name = "Name", Value = "Value" } } }, Pools = new AdoPoolContainer() { Pools = pools }},
             new AdoStageTemplate(){Template = "Template", Condition = "Condition", Parameters = new List<string>(){"Param1","Param2"}}
         };
 

@@ -18,6 +18,9 @@ public class SectionSerializerFactory
             case AdoPoolContainer _: return new AdoPoolSerializer();
             case AdoStepContainer _: return new AdoStepSerializer();
             case AdoDeploymentStrategyContainer _: return new AdoDeploymentStrategySerializer();
+            case AdoParameterContainer: return new AdoParameterSerializer();
+            case AdoTemplateParameterContainer: return new AdoParameterSerializer();
+
             default: throw new NotImplementedException();
         }
     }

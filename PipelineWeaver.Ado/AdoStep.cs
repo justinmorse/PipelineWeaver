@@ -8,7 +8,7 @@ public class AdoStepContainer : AdoSectionBase
 
 public abstract class AdoStepBase
 {
-    public required string Name { get; set; }
+    public string? Name { get; set; }
     public int? TimeoutInMinutes { get; set; }
     public string? DisplayName { get; set; }
     public bool? ContinueOnError { get; set; }
