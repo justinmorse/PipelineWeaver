@@ -21,14 +21,14 @@ public class AdoSerializerTests
     public void TestPipelineBuild()
     {
 
-        var variables = new List<AdoVariableBase>()
+        var variables = new AdoSectionCollection<AdoVariableBase>()
         {
             new AdoNameVariable{Name = "test",Value = "value"},
             new AdoGroupVariable{Group = "value"},
             new AdoTemplateVariable{Template = "value"}
         };
 
-        var triggers = new List<AdoTriggerBase>()
+        var triggers = new AdoSectionCollection<AdoTriggerBase>()
         {
             new AdoTrigger(){TriggerType = AdoTriggerType.PathInclude,Value = "PathIncludeTrigger"},
             new AdoTrigger(){TriggerType = AdoTriggerType.PathExclude,Value = "PathExcludeTrigger"},
@@ -38,7 +38,7 @@ public class AdoSerializerTests
             new AdoTrigger(){TriggerType = AdoTriggerType.TagExclude,Value = "TagExcludeTrigger"},
         };
 
-        var resources = new List<AdoResourceBase>()
+        var resources = new AdoSectionCollection<AdoResourceBase>()
         {
             new AdoContainerResource(){Container = "Container",Connection = "Connection",Image = "Image",Options = "Options",Env = "Env",Ports = "Ports",Volumes = "Volumes"},
             new AdoBuildResource(){Build = "Build",Connection = "Connection", Source = "Source", Trigger = true},
@@ -47,7 +47,7 @@ public class AdoSerializerTests
             new AdoPipelineResource(){Pipeline = "Pipeline",Connection = "Connection",Project = "Project",Source = "Source",Version = "Version",Branch = "Branch",Tags = new List<string>{"Tag1","Tag2"}}
         };
 
-        var pools = new List<AdoPoolBase>()
+        var pools = new AdoSectionCollection<AdoPoolBase>()
         {
             new AdoHostedPool(){VmImage = "HostedPool"},
             new AdoNamedPool(){Name = "Pool"}
@@ -69,30 +69,30 @@ public class AdoSerializerTests
             }
         };
 
-        var adoJobParameters = new List<AdoParameterBase>()
+        var adoJobParameters = new AdoSectionCollection<AdoParameterBase>()
         {
             new AdoBoolParameter(){Name = "Bool", Value = true},
             new AdoStringParameter(){Name = "String", Value = "Value"},
-            new AdoObjectParameter<List<string>>(){Name = "ListString", Value = new List<string>(){"one","two"}},
-            new AdoObjectParameter<List<object>>(){Name = "ListObj", Value= new List<object>(){weirdObj, weirdObj}},
-            new AdoObjectParameter<Dictionary<string, string>>(){Name = "StringDict", Value = new Dictionary<string, string>(){{"key1","value1"},{"key2","value2"}}},
-            new AdoObjectParameter<Dictionary<string, bool>>(){Name = "boolDict", Value = new Dictionary<string, bool>(){{"key1",true},{"key2",true}}},
-            new AdoObjectParameter<Dictionary<string, object>>(){Name = "objDict", Value = new Dictionary<string, object>(){{"key1",weirdObj},{"key2",weirdObj}}},
+            //new AdoObjectParameter<List<string>>(){Name = "ListString", Value = new List<string>(){"one","two"}},
+            //new AdoObjectParameter<List<object>>(){Name = "ListObj", Value= new List<object>(){weirdObj, weirdObj}},
+            //new AdoObjectParameter<Dictionary<string, string>>(){Name = "StringDict", Value = new Dictionary<string, string>(){{"key1","value1"},{"key2","value2"}}},
+            //new AdoObjectParameter<Dictionary<string, bool>>(){Name = "boolDict", Value = new Dictionary<string, bool>(){{"key1",true},{"key2",true}}},
+            //new AdoObjectParameter<Dictionary<string, object>>(){Name = "objDict", Value = new Dictionary<string, object>(){{"key1",weirdObj},{"key2",weirdObj}}},
         };
 
-        var jobSteps = new List<AdoStepBase>(){
+        var jobSteps = new AdoSectionCollection<AdoStepBase>(){
             new AdoScriptStep(){Script = "Script"},
-            new AdoTemplateStep(){Template = "Template", Parameters = new AdoParameterContainer() { Parameters = adoJobParameters }},
+            new AdoTemplateStep(){Template = "Template", Parameters = adoJobParameters },
         };
 
-        var jobs = new List<AdoJobBase>(){
-            new AdoJob(){Job = "Job", Condition = "Condition", DependsOn = new List<string>(){"Depend1","Depend2"}, DisplayName = "DisplayName", Steps = new AdoStepContainer{Steps = jobSteps}},
-            new AdoTemplateJob(){Template = "Template", Condition = "Condition", Parameters = new AdoParameterContainer() { Parameters = adoJobParameters }},
+        var jobs = new AdoSectionCollection<AdoJobBase>(){
+            new AdoJob(){Job = "Job", Condition = "Condition", DependsOn = new List<string>(){"Depend1","Depend2"}, DisplayName = "DisplayName", Steps = jobSteps},
+            new AdoTemplateJob(){Template = "Template", Condition = "Condition", Parameters = adoJobParameters },
         };
 
-        var stages = new List<AdoStageBase>()
+        var stages = new AdoSectionCollection<AdoStageBase>()
         {
-            new AdoStage(){Stage = "Stage", Condition = "Condition", DependsOn = new List<string>(){"Depend1","Depend2"}, DisplayName = "DisplayName", IsSkippable = true, Jobs = new AdoJobContainer(){Jobs = jobs}, LockBehavior = "LockBehavior", TemplateContext = "TemplateContext", Trigger = "Trigger", Variables = new AdoVariableContainer() { Variables = new List<AdoVariableBase>() { new AdoNameVariable() { Name = "Name", Value = "Value" } } }, Pools = new AdoPoolContainer() { Pools = pools }},
+            new AdoStage(){Stage = "Stage", Condition = "Condition", DependsOn = new List<string>(){"Depend1","Depend2"}, DisplayName = "DisplayName", IsSkippable = true, Jobs =  jobs, LockBehavior = "LockBehavior", TemplateContext = "TemplateContext", Trigger = "Trigger", Variables = new AdoSectionCollection<AdoVariableBase>() { new AdoNameVariable() { Name = "Name", Value = "Value" } }, Pools = pools },
             new AdoStageTemplate(){Template = "Template", Condition = "Condition", Parameters = new List<string>(){"Param1","Param2"}}
         };
 
@@ -100,10 +100,10 @@ public class AdoSerializerTests
         {
             Name = "test",
             Pool = "Pool",
-            Variables = new AdoVariableContainer() { Variables = variables },
-            Triggers = new AdoTriggerContainer() { Triggers = triggers },
-            Resources = new AdoResourceContainer() { Resources = resources },
-            Stages = new AdoStageContainer() { Stages = stages }
+            Variables = variables,
+            Triggers = triggers,
+            Resources = resources,
+            Stages = stages
         };
 
         var doc = new AdoYamlDocument();

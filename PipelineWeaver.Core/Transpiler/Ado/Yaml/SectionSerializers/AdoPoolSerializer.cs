@@ -13,19 +13,19 @@ namespace PipelineWeaver.Core.Transpiler.Ado.Yaml.SectionSerializers
         internal AdoYamlBuilder _builder = new AdoYamlBuilder();
         public void AppendSection(AdoSectionBase section, AdoYamlBuilder? builder, int startingIndent)
         {
-            var pool = section as AdoPoolContainer ?? throw new ArgumentException(nameof(section));
+            var pool = section as AdoSectionCollection<AdoPoolBase> ?? throw new ArgumentException(nameof(section));
             if (builder is not null)
                 _builder = builder;
 
             AppendPools(pool, startingIndent);
         }
 
-        private void AppendPools(AdoPoolContainer pool, int startingIndent)
+        private void AppendPools(AdoSectionCollection<AdoPoolBase> pool, int startingIndent)
         {
-            if (pool.Pools?.Count > 0)
+            if (pool.Count > 0)
             {
                 _builder.AppendLine(startingIndent, "pools:");
-                pool.Pools.ForEach(p =>
+                pool.ToList().ForEach(p =>
                 {
                     switch (p)
                     {

@@ -10,13 +10,13 @@ public class AdoDeploymentStrategySerializer : IAdoYamlSectionSerializer
     internal AdoYamlBuilder _builder = new AdoYamlBuilder();
     public void AppendSection(AdoSectionBase section, AdoYamlBuilder? builder, int startingIndentation)
     {
-        var deploymentStrategy = section as AdoDeploymentStrategyContainer ?? throw new ArgumentException(nameof(section));
+        var deploymentStrategy = section as AdoDeploymentStrategyBase ?? throw new ArgumentException(nameof(section));
         if (builder is not null)
             _builder = builder;
 
-        if (deploymentStrategy.DeploymentStrategy is not null)
+        if (deploymentStrategy is not null)
         {
-            AppendDeploymentStrategies(deploymentStrategy.DeploymentStrategy, startingIndentation);
+            AppendDeploymentStrategies(deploymentStrategy, startingIndentation);
         }
     }
 

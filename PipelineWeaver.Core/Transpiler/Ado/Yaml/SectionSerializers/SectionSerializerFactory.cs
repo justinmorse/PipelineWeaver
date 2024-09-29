@@ -10,16 +10,16 @@ public class SectionSerializerFactory
         switch (section)
         {
             case AdoPipeline _: return new AdoPipelineSerializer();
-            case AdoVariableContainer _: return new AdoVariableSectionSerializer();
+            case AdoSectionCollection<AdoVariableBase> _: return new AdoVariableSectionSerializer();
             case AdoTriggerContainer _: return new AdoTriggerSerializer();
-            case AdoResourceContainer _: return new AdoResourceSerializer();
-            case AdoStageContainer _: return new AdoStageSerializer();
-            case AdoJobContainer _: return new AdoJobSerializer();
-            case AdoPoolContainer _: return new AdoPoolSerializer();
-            case AdoStepContainer _: return new AdoStepSerializer();
-            case AdoDeploymentStrategyContainer _: return new AdoDeploymentStrategySerializer();
-            case AdoParameterContainer: return new AdoParameterSerializer();
-            case AdoTemplateParameterContainer: return new AdoParameterSerializer();
+            case AdoSectionCollection<AdoResourceBase> _: return new AdoResourceSerializer();
+            case AdoSectionCollection<AdoStageBase> _: return new AdoStageSerializer();
+            case AdoSectionCollection<AdoJobBase> _: return new AdoJobSerializer();
+            case AdoSectionCollection<AdoPoolBase> _: return new AdoPoolSerializer();
+            case AdoSectionCollection<AdoStepBase> _: return new AdoStepSerializer();
+            case AdoSectionCollection<AdoDeploymentStrategyBase> _: return new AdoDeploymentStrategySerializer();
+            case AdoSectionCollection<AdoParameterBase> _: return new AdoParameterSerializer();
+            case AdoSectionCollection<AdoTemplateParameter> _: return new AdoParameterSerializer();
 
             default: throw new NotImplementedException();
         }

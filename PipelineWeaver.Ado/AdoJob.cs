@@ -2,11 +2,6 @@ using System;
 
 namespace PipelineWeaver.Ado;
 
-public class AdoJobContainer : AdoSectionBase
-{
-    public List<AdoJobBase> Jobs { get; set; } = new List<AdoJobBase>();
-}
-
 public abstract class AdoJobBase
 {
     public string? DisplayName { get; set; }
@@ -15,7 +10,7 @@ public abstract class AdoJobBase
     public bool? ContinueOnError { get; set; }
     public int? TimeoutInMinutes { get; set; }
     public int? CancelTimeoutInMinutes { get; set; }
-    public AdoVariableContainer? Variables { get; set; }
+    public AdoSectionCollection<AdoVariableBase>? Variables { get; set; }
     public string? Pool { get; set; }
     public AdoWorkspace? Workspace { get; set; }
 
@@ -29,7 +24,7 @@ public class AdoJob : AdoJobBase
 {
     public required string Job { get; set; }
     public AdoJobStrategy? Strategy { get; set; }
-    public AdoStepContainer? Steps { get; set; }
+    public AdoSectionCollection<AdoStepBase>? Steps { get; set; }
 
 }
 
@@ -37,13 +32,13 @@ public class AdoDeploymentJob : AdoJobBase
 {
     public required string Deployment { get; set; }
     public AdoEnvironment? Environment { get; set; }
-    public AdoDeploymentStrategyContainer? Strategy { get; set; }
+    public AdoDeploymentStrategyBase? Strategy { get; set; }
 }
 
 public class AdoTemplateJob : AdoJobBase
 {
     public required string Template { get; set; }
-    public AdoParameterContainer? Parameters { get; set; }
+    public AdoSectionCollection<AdoParameterBase>? Parameters { get; set; }
 }
 
 public class AdoUses

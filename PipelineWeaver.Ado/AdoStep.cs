@@ -1,11 +1,6 @@
 using System;
 namespace PipelineWeaver.Ado;
 
-public class AdoStepContainer : AdoSectionBase
-{
-    public List<AdoStepBase> Steps { get; set; } = new();
-}
-
 public abstract class AdoStepBase
 {
     public string? Name { get; set; }
@@ -109,5 +104,5 @@ public class AdoTaskStep : AdoStepBase
 public class AdoTemplateStep : AdoStepBase
 {
     public required string Template { get; set; }
-    public AdoParameterContainer? Parameters { get; set; }
+    public AdoSectionCollection<AdoParameterBase>? Parameters { get; set; }
 }

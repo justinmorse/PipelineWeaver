@@ -2,13 +2,6 @@ using System;
 
 namespace PipelineWeaver.Ado;
 
-
-public class AdoPoolContainer : AdoSectionBase
-{
-
-    public List<AdoPoolBase>? Pools { get; set; }
-}
-
 public abstract class AdoPoolBase
 {
     //empty

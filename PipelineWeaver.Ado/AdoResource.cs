@@ -2,11 +2,6 @@ using System;
 
 namespace PipelineWeaver.Ado;
 
-public class AdoResourceContainer : AdoSectionBase
-{
-    public List<AdoResourceBase>? Resources { get; set; }
-}
-
 public abstract class AdoResourceBase
 {
     //Left empty 

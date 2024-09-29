@@ -36,7 +36,7 @@ public class AdoPipelineSerializer : IAdoYamlSectionSerializer
 
     internal void AppendVariables(AdoPipeline pipeline, int startingIndent)
     {
-        if (pipeline.Variables?.Variables.Count > 0)
+        if (pipeline.Variables?.Count > 0)
         {
             _builder.Append(startingIndent, pipeline.Variables);
             _builder.AppendEmptyLine();
@@ -52,7 +52,7 @@ public class AdoPipelineSerializer : IAdoYamlSectionSerializer
 
     internal void AppendResources(AdoPipeline pipeline, int startingIndent)
     {
-        if (pipeline.Resources?.Resources?.Count > 0)
+        if (pipeline.Resources?.Count > 0)
         {
             _builder.Append(startingIndent, pipeline.Resources);
             _builder.AppendEmptyLine();

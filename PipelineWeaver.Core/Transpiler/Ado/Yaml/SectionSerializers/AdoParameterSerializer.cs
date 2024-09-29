@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using System.Reflection;
 using System.Reflection.Metadata.Ecma335;
 using PipelineWeaver.Ado;
 using PipelineWeaver.Core.Transpiler.Ado.Yaml.SectionSerializers.Interfaces;
@@ -16,10 +18,10 @@ public class AdoParameterSerializer : IAdoYamlSectionSerializer
 
         switch (section)
         {
-            case AdoParameterContainer parameters:
+            case AdoSectionCollection<AdoParameterBase> parameters:
                 AppendParameters(parameters, startingIndent);
                 break;
-            case AdoTemplateParameterContainer templateParameters:
+            case AdoSectionCollection<AdoTemplateParameter> templateParameters:
                 AppendTemplateParameters(templateParameters, startingIndent);
                 break;
             default:
@@ -27,10 +29,10 @@ public class AdoParameterSerializer : IAdoYamlSectionSerializer
         };
     }
 
-    internal void AppendParameters(AdoParameterContainer parameters, int startingIndent)
+    internal void AppendParameters(AdoSectionCollection<AdoParameterBase> parameters, int startingIndent)
     {
         _builder.AppendLine(startingIndent, "parameters:");
-        foreach (var p in parameters.Parameters)
+        foreach (var p in parameters)
         {
             var type = p.GetType();
             if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(AdoObjectParameter<>))
@@ -52,25 +54,28 @@ public class AdoParameterSerializer : IAdoYamlSectionSerializer
 
 
 
-    private void AppendStringParameter(AdoStringParameter parameter, int v)
+    private void AppendStringParameter(AdoStringParameter parameter, int startingIndent)
     {
-        throw new NotImplementedException();
+        _builder.AppendLine(startingIndent, parameter.Name + ": " + parameter.Value);
     }
 
-    private void AppendBoolParameter(AdoBoolParameter parameter, int v)
+    private void AppendBoolParameter(AdoBoolParameter parameter, int startingIndent)
     {
-        throw new NotImplementedException();
+        _builder.AppendLine(startingIndent, parameter.Name + ": " + parameter.Value);
     }
 
-    private void AppendObjectParameter<T>(AdoObjectParameter<T> parameter, int v)
+    private void AppendObjectParameter<T>(AdoObjectParameter<T> parameter, int startingIndent) where T : AdoObjectBase
     {
-        throw new NotImplementedException();
+        if (parameter.Value is null) return;
+
+        _builder.AppendLine(startingIndent, parameter.Name + ":");
+        _builder.Append(startingIndent + 2, parameter.Value);
     }
 
-    internal void AppendTemplateParameters(AdoTemplateParameterContainer parameters, int startingIndent)
+    internal void AppendTemplateParameters(AdoSectionCollection<AdoTemplateParameter> parameters, int startingIndent)
     {
         _builder.AppendLine(startingIndent, "parameters:");
-        foreach (var p in parameters.Parameters)
+        foreach (var p in parameters)
         {
             var type = p.GetType();
             if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(AdoObjectTemplateParameter<>))
@@ -92,18 +97,32 @@ public class AdoParameterSerializer : IAdoYamlSectionSerializer
         }
     }
 
-    private void AppendStringTemplateParameter(AdoStringTemplateParameter parameter, int v)
+    private void AppendStringTemplateParameter(AdoStringTemplateParameter parameter, int startingIndent)
     {
-        throw new NotImplementedException();
+        _builder.AppendLine(startingIndent, $"- name: {parameter.Name}");
+        _builder.AppendLine(startingIndent + 2, $"type: string");
+        if (!string.IsNullOrWhiteSpace(parameter.Default))
+            _builder.AppendLine(startingIndent + 2, $"default: {parameter.Default}");
     }
 
-    private void AppendBoolTemplateParameter(AdoBoolTemplateParameter parameter, int v)
+    private void AppendBoolTemplateParameter(AdoBoolTemplateParameter parameter, int startingIndent)
     {
-        throw new NotImplementedException();
+        _builder.AppendLine(startingIndent, $"- name: {parameter.Name}");
+        _builder.AppendLine(startingIndent + 2, $"type: bool");
+        if (parameter.Default != null)
+            _builder.AppendLine(startingIndent + 2, $"default: {parameter.Default}");
     }
 
-    private void AppendObjectTemplateParameter<T>(AdoObjectTemplateParameter<T> parameter, int v)
+    private void AppendObjectTemplateParameter<T>(AdoObjectTemplateParameter<T> parameter, int startingIndent) where T : AdoObjectBase
     {
-        throw new NotImplementedException();
+        _builder.AppendLine(startingIndent, $"- name: {parameter.Name}");
+        _builder.AppendLine(startingIndent + 2, $"type: object");
+        if (parameter.Default != null)
+        {
+            _builder.AppendLine(startingIndent + 2, $"default:");
+            _builder.Append(startingIndent + 4, parameter.Default);
+        }
     }
 }
+
+

@@ -14,22 +14,22 @@ namespace PipelineWeaver.Core.Transpiler.Ado.Yaml.SectionSerializers
 
         public void AppendSection(AdoSectionBase section, AdoYamlBuilder? builder, int startingIndent)
         {
-            var stage = section as AdoStageContainer ?? throw new ArgumentException(nameof(section));
+            var stage = section as AdoSectionCollection<AdoStageBase> ?? throw new ArgumentException(nameof(section));
             if (builder is not null)
                 _builder = builder;
 
-            if (stage.Stages?.Count > 0)
+            if (stage?.Count > 0)
             {
                 _builder.AppendLine(startingIndent, "stages:");
                 AppendStages(stage, startingIndent + 2);
             }
         }
 
-        private void AppendStages(AdoStageContainer stages, int startingIndent)
+        private void AppendStages(AdoSectionCollection<AdoStageBase> stages, int startingIndent)
         {
-            if (stages.Stages?.Count > 0)
+            if (stages?.Count > 0)
             {
-                stages.Stages.ForEach(s =>
+                stages.ToList().ForEach(s =>
                 {
                     switch (s)
                     {
@@ -78,7 +78,7 @@ namespace PipelineWeaver.Core.Transpiler.Ado.Yaml.SectionSerializers
                 _builder.AppendLine(startingIndent + 2, "templateContext: " + stage.TemplateContext);
             if (stage.Pools is not null)
                 _builder.Append(startingIndent, stage.Pools);
-            if (stage.Jobs?.Jobs.Count > 0)
+            if (stage.Jobs?.Count > 0)
                 _builder.Append(startingIndent, stage.Jobs);
 
         }

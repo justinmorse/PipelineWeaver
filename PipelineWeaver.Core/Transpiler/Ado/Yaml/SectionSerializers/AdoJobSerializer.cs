@@ -14,22 +14,22 @@ namespace PipelineWeaver.Core.Transpiler.Ado.Yaml.SectionSerializers
 
         public void AppendSection(AdoSectionBase section, AdoYamlBuilder? builder, int startingIndent)
         {
-            var job = section as AdoJobContainer ?? throw new ArgumentException(nameof(section));
+            var jobs = section as AdoSectionCollection<AdoJobBase> ?? throw new ArgumentException(nameof(section));
             if (builder is not null)
                 _builder = builder;
 
-            if (job.Jobs?.Count > 0)
+            if (jobs.Count > 0)
             {
-                AppendJobs(job, startingIndent);
+                AppendJobs(jobs, startingIndent);
             }
         }
 
-        private void AppendJobs(AdoJobContainer job, int startingIndent)
+        private void AppendJobs(AdoSectionCollection<AdoJobBase> job, int startingIndent)
         {
-            if (job.Jobs.Count > 0)
+            if (job.Count > 0)
             {
                 _builder.AppendLine(startingIndent, "jobs:");
-                job.Jobs.ForEach(j => AppendJob(j, startingIndent + 2));
+                job.ToList().ForEach(j => AppendJob(j, startingIndent + 2));
             }
         }
 
@@ -54,7 +54,7 @@ namespace PipelineWeaver.Core.Transpiler.Ado.Yaml.SectionSerializers
         private void AppendJobTemplate(AdoTemplateJob job, int startingIndent)
         {
             _builder.AppendLine(startingIndent + 2, "- template: " + job.Template);
-            if (job.Parameters?.Parameters.Count > 0)
+            if (job.Parameters?.Count > 0)
             {
                 _builder.AppendLine(startingIndent + 4, "parameters:");
                 _builder.Append(4 + startingIndent, job.Parameters);
@@ -81,7 +81,7 @@ namespace PipelineWeaver.Core.Transpiler.Ado.Yaml.SectionSerializers
                     _builder.AppendLine(startingIndent + 6, "maxParallel: " + job.Strategy.MaxParallel);
             }
 
-            if (job.Steps?.Steps.Count() > 0)
+            if (job.Steps?.Count() > 0)
             {
                 _builder.AppendLine(startingIndent + 4, "steps:");
                 _builder.Append(startingIndent + 6, job.Steps);

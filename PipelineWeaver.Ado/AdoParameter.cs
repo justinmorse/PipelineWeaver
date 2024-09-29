@@ -5,16 +5,6 @@ using System.Threading.Tasks;
 
 namespace PipelineWeaver.Ado
 {
-    public class AdoParameterContainer : AdoSectionBase
-    {
-        public List<AdoParameterBase> Parameters { get; set; } = new List<AdoParameterBase>();
-    }
-
-    public class AdoTemplateParameterContainer : AdoSectionBase
-    {
-        public List<AdoTemplateParameter> Parameters { get; set; } = new List<AdoTemplateParameter>();
-    }
-
     public abstract class AdoParameterBase
     {
         public required string Name { get; set; }
@@ -29,9 +19,8 @@ namespace PipelineWeaver.Ado
     {
         public required bool Value { get; set; }
     }
-    public class AdoObjectParameter<T> : AdoParameterBase
+    public class AdoObjectParameter<T> : AdoParameterBase where T : AdoObjectBase
     {
-
         public required T Value { get; set; }
     }
 
@@ -45,19 +34,16 @@ namespace PipelineWeaver.Ado
 
     public class AdoStringTemplateParameter : AdoTemplateParameter
     {
-        public required string Value { get; set; }
         public string? Default { get; set; }
     }
 
     public class AdoBoolTemplateParameter : AdoTemplateParameter
     {
-        public required bool Value { get; set; }
         public bool? Default { get; set; }
     }
 
-    public class AdoObjectTemplateParameter<T> : AdoTemplateParameter
+    public class AdoObjectTemplateParameter<T> : AdoTemplateParameter where T : AdoObjectBase
     {
-        public required T Value { get; set; }
         public required T Default { get; set; }
     }
 }

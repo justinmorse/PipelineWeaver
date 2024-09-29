@@ -2,11 +2,6 @@ using System;
 
 namespace PipelineWeaver.Ado;
 
-public class AdoVariableContainer : AdoSectionBase
-{
-    public List<AdoVariableBase> Variables { get; set; } = new List<AdoVariableBase>();
-}
-
 public abstract class AdoVariableBase
 {
     //Empty

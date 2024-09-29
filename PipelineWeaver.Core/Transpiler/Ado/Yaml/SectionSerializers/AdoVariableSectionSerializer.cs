@@ -11,12 +11,12 @@ public class AdoVariableSectionSerializer : IAdoYamlSectionSerializer
 
     public void AppendSection(AdoSectionBase section, AdoYamlBuilder? builder, int startingIndent)
     {
-        var variables = section as AdoVariableContainer ?? throw new ArgumentException(nameof(section));
+        var variables = section as AdoSectionCollection<AdoVariableBase> ?? throw new ArgumentException(nameof(section));
         if (builder is not null)
             _builder = builder;
 
         _builder.AppendLine(startingIndent, "variables:");
-        variables.Variables.ForEach(v =>
+        variables.ToList().ForEach(v =>
         {
             switch (v)
             {

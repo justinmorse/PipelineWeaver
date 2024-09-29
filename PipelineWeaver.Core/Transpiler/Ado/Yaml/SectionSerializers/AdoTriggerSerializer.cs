@@ -18,7 +18,7 @@ namespace PipelineWeaver.Core.Transpiler.Ado.Yaml.SectionSerializers
                 _builder = builder;
 
             _builder.AppendLine(startingIndent, "triggers:");
-            if (trigger.Triggers.Count > 0)
+            if (trigger.Count > 0)
             {
                 if (trigger.Batch)
                     _builder.AppendLine(startingIndent + 2, "batch: true");
@@ -30,7 +30,7 @@ namespace PipelineWeaver.Core.Transpiler.Ado.Yaml.SectionSerializers
 
         private void AppendTagTriggers(AdoTriggerContainer triggers, int startingIndent)
         {
-            var tagTriggers = triggers.Triggers.Where(t => t.TriggerType == AdoTriggerType.TagInclude || t.TriggerType == AdoTriggerType.TagExclude);
+            var tagTriggers = triggers.Where(t => t.TriggerType == AdoTriggerType.TagInclude || t.TriggerType == AdoTriggerType.TagExclude);
             if (tagTriggers.Count() == 0)
                 return;
 
@@ -43,7 +43,7 @@ namespace PipelineWeaver.Core.Transpiler.Ado.Yaml.SectionSerializers
 
         private void AppendPathTriggers(AdoTriggerContainer triggers, int startingIndent)
         {
-            var pathTriggers = triggers.Triggers.Where(t => t.TriggerType == AdoTriggerType.PathInclude || t.TriggerType == AdoTriggerType.PathExclude);
+            var pathTriggers = triggers.Where(t => t.TriggerType == AdoTriggerType.PathInclude || t.TriggerType == AdoTriggerType.PathExclude);
             if (pathTriggers.Count() == 0)
                 return;
 
@@ -56,7 +56,7 @@ namespace PipelineWeaver.Core.Transpiler.Ado.Yaml.SectionSerializers
 
         private void AppendBranchTriggers(AdoTriggerContainer triggers, int startingIndent)
         {
-            var branchTriggers = triggers.Triggers.Where(t => t.TriggerType == AdoTriggerType.BranchInclude || t.TriggerType == AdoTriggerType.BranchExclude);
+            var branchTriggers = triggers.Where(t => t.TriggerType == AdoTriggerType.BranchInclude || t.TriggerType == AdoTriggerType.BranchExclude);
             if (branchTriggers.Count() == 0)
                 return;
 

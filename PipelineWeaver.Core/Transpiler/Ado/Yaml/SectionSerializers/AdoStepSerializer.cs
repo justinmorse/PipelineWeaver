@@ -14,7 +14,7 @@ namespace PipelineWeaver.Core.Transpiler.Ado.Yaml.SectionSerializers
 
         public void AppendSection(AdoSectionBase section, AdoYamlBuilder? builder, int startingIndent)
         {
-            var stepSection = section as AdoStepContainer ?? throw new ArgumentException(nameof(section));
+            var stepSection = section as AdoSectionCollection<AdoStepBase> ?? throw new ArgumentException(nameof(section));
             if (builder is not null)
                 _builder = builder;
 
@@ -23,9 +23,9 @@ namespace PipelineWeaver.Core.Transpiler.Ado.Yaml.SectionSerializers
         }
 
 
-        public void AppendSteps(AdoStepContainer steps, int startingIndent)
+        public void AppendSteps(AdoSectionCollection<AdoStepBase> steps, int startingIndent)
         {
-            foreach (var s in steps.Steps)
+            foreach (var s in steps)
             {
                 switch (s)
                 {

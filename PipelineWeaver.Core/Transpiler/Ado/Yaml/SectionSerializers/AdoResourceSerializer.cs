@@ -15,12 +15,12 @@ namespace PipelineWeaver.Core.Transpiler.Ado.Yaml.SectionSerializers
 
         public void AppendSection(AdoSectionBase section, AdoYamlBuilder? builder, int startingIndent)
         {
-            var resource = section as AdoResourceContainer ?? throw new ArgumentException(nameof(section));
+            var resource = section as AdoSectionCollection<AdoResourceBase> ?? throw new ArgumentException(nameof(section));
             if (builder is not null)
                 _builder = builder;
 
             _builder.AppendLine(startingIndent, "resources:");
-            if (resource.Resources?.Count > 0)
+            if (resource?.Count > 0)
             {
                 AppendPipelineResources(resource, startingIndent + 2);
                 AppendBuildResources(resource, startingIndent + 2);
@@ -30,9 +30,9 @@ namespace PipelineWeaver.Core.Transpiler.Ado.Yaml.SectionSerializers
             }
         }
 
-        private void AppendPipelineResources(AdoResourceContainer resources, int startingIndent)
+        private void AppendPipelineResources(AdoSectionCollection<AdoResourceBase> resources, int startingIndent)
         {
-            var pipelineResources = resources.Resources?.Where(r => r is AdoPipelineResource).ToList() ?? new List<AdoResourceBase>();
+            var pipelineResources = resources?.Where(r => r is AdoPipelineResource).ToList() ?? new List<AdoResourceBase>();
             if (pipelineResources.Count() == 0)
                 return;
 
@@ -57,9 +57,9 @@ namespace PipelineWeaver.Core.Transpiler.Ado.Yaml.SectionSerializers
             });
         }
 
-        private void AppendBuildResources(AdoResourceContainer resources, int startingIndent)
+        private void AppendBuildResources(AdoSectionCollection<AdoResourceBase> resources, int startingIndent)
         {
-            var buildResources = resources.Resources?.Where(r => r is AdoBuildResource).ToList() ?? new List<AdoResourceBase>();
+            var buildResources = resources?.Where(r => r is AdoBuildResource).ToList() ?? new List<AdoResourceBase>();
             if (buildResources.Count() == 0)
                 return;
 
@@ -79,9 +79,9 @@ namespace PipelineWeaver.Core.Transpiler.Ado.Yaml.SectionSerializers
                     _builder.AppendLine(startingIndent + 2, $"trigger: {buildResource?.Trigger.Value}");
             });
         }
-        private void AppendRepositoryResources(AdoResourceContainer resources, int startingIndent)
+        private void AppendRepositoryResources(AdoSectionCollection<AdoResourceBase> resources, int startingIndent)
         {
-            var repoResources = resources.Resources?.Where(r => r is AdoRepositoryResource).ToList() ?? new List<AdoResourceBase>();
+            var repoResources = resources?.Where(r => r is AdoRepositoryResource).ToList() ?? new List<AdoResourceBase>();
             if (repoResources.Count() == 0)
                 return;
 
@@ -104,9 +104,9 @@ namespace PipelineWeaver.Core.Transpiler.Ado.Yaml.SectionSerializers
             });
         }
 
-        private void AppendContainerResources(AdoResourceContainer resources, int startingIndent)
+        private void AppendContainerResources(AdoSectionCollection<AdoResourceBase> resources, int startingIndent)
         {
-            var containerResources = resources.Resources?.Where(r => r is AdoContainerResource).ToList() ?? new List<AdoResourceBase>();
+            var containerResources = resources.Where(r => r is AdoContainerResource).ToList() ?? new List<AdoResourceBase>();
             if (containerResources.Count() == 0)
                 return;
             _builder.AppendLine(startingIndent, "containers:");
@@ -130,9 +130,9 @@ namespace PipelineWeaver.Core.Transpiler.Ado.Yaml.SectionSerializers
             });
         }
 
-        private void AppendPackageResources(AdoResourceContainer resources, int startingIndent)
+        private void AppendPackageResources(AdoSectionCollection<AdoResourceBase> resources, int startingIndent)
         {
-            var packageResources = resources.Resources?.Where(r => r is AdoPackageResource).ToList() ?? new List<AdoResourceBase>();
+            var packageResources = resources?.Where(r => r is AdoPackageResource).ToList() ?? new List<AdoResourceBase>();
             if (packageResources.Count() == 0)
                 return;
 

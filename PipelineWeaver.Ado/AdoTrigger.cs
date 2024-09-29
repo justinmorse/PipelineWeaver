@@ -2,11 +2,11 @@ using System;
 
 namespace PipelineWeaver.Ado;
 
-public class AdoTriggerContainer : AdoSectionBase
+public class AdoTriggerContainer : AdoSectionCollection<AdoTriggerBase>
 {
     public bool Batch { get; set; }
-    public required List<AdoTriggerBase> Triggers { get; set; }
 }
+
 
 public abstract class AdoTriggerBase
 {

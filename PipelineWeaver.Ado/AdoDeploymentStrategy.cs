@@ -1,13 +1,9 @@
 using System;
+using System.Collections;
 
 namespace PipelineWeaver.Ado;
 
-public class AdoDeploymentStrategyContainer : AdoSectionBase
-{
-    public AdoDeploymentStrategyBase? DeploymentStrategy { get; set; }
-}
-
-public abstract class AdoDeploymentStrategyBase
+public abstract class AdoDeploymentStrategyBase : AdoSectionBase
 {
     public AdoDeploymentStrategyItem? PreDeploy { get; set; }
     public AdoDeploymentStrategyItem? Deploy { get; set; }
@@ -33,13 +29,13 @@ public class AdoCanaryDeploymentStrategy : AdoRunOnceDeploymentStrategy
 
 public class AdoDeploymentStrategyItem
 {
-    public required AdoStepContainer Steps { get; set; } // A list of steps to run.
-    public string? Pool { get; set; } // Pool where pre deploy steps will run.
+    public required AdoSectionCollection<AdoStepBase> Steps { get; set; }
+    public string? Pool { get; set; }
 }
 
 
 public class AdoDeplymentStrategyOn
 {
-    public AdoDeploymentStrategyItem? Failure { get; set; } // Runs on failure of any step.
-    public AdoDeploymentStrategyItem? Success { get; set; } // Runs on success of all of the steps.
+    public AdoDeploymentStrategyItem? Failure { get; set; }
+    public AdoDeploymentStrategyItem? Success { get; set; }
 }

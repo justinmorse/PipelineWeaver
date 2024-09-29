@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Text;
 using System.Text.Json;
 using PipelineWeaver.Ado;
@@ -35,21 +36,23 @@ public class AdoYamlBuilder
         _sb.AppendLine();
     }
 
-    public void AppendList(string sectionName, int indention, List<string>? items)
+    public void AppendList(string? sectionName, int indention, List<string>? items)
     {
         if (items is null || !items.Any()) return;
 
         var indentionStr = new string(' ', indention);
-        _sb.AppendLine($"{indentionStr}{sectionName}:");
+        if (!string.IsNullOrWhiteSpace(sectionName))
+            _sb.AppendLine($"{indentionStr}{sectionName}:");
         items.ForEach(t => _sb.AppendLine($"{indentionStr}- {t}"));
     }
 
-    public void AppendKeyValuePairs(string sectionName, int indention, Dictionary<string, string>? items)
+    public void AppendKeyValuePairs(string? sectionName, int indention, Dictionary<string, string>? items)
     {
         if (items is null || !items.Any()) return;
 
         var indentionStr = new string(' ', indention);
-        _sb.AppendLine($"{indentionStr}{sectionName}:");
+        if (!string.IsNullOrWhiteSpace(sectionName))
+            _sb.AppendLine($"{indentionStr}{sectionName}:");
         items.Keys.ToList().ForEach(t => _sb.AppendLine($"{indentionStr}- {t}: {items[t]}"));
     }
 
@@ -77,23 +80,3 @@ public static class AdoSerializerHelpers
     }
 }
 
-public static class StringExtensions
-{
-    public static List<string> SplitLinesAtNewLine(this string multilineString)
-    {
-        return [.. multilineString.Split(Environment.NewLine)];
-    }
-
-    public static string Join(this List<string> list, string separator)
-    {
-        return string.Join(separator, list);
-    }
-}
-
-public static class DictionaryExtensions
-{
-    public static string ToJson(this Dictionary<string, object> dict)
-    {
-        return JsonSerializer.Serialize(dict);
-    }
-}

@@ -6,8 +6,8 @@ public class AdoPipeline : AdoSectionBase
 {
     public string? Name { get; set; }
     public string? Pool { get; set; }
-    public AdoVariableContainer? Variables { get; set; }
-    public AdoTriggerContainer? Triggers { get; set; }
-    public AdoResourceContainer? Resources { get; set; }
-    public AdoStageContainer? Stages { get; set; }
+    public AdoSectionCollection<AdoVariableBase>? Variables { get; set; }
+    public AdoSectionCollection<AdoTriggerBase>? Triggers { get; set; }
+    public AdoSectionCollection<AdoResourceBase>? Resources { get; set; }
+    public AdoSectionCollection<AdoStageBase>? Stages { get; set; }
 }
