@@ -26,7 +26,7 @@ public class AdoSerializerTests
             new AdoTemplateVariable{Template = "value"}
         };
 
-        var triggers = new AdoSectionCollection<AdoTriggerBase>()
+        var triggers = new AdoTriggerContainer()
         {
             new AdoTrigger(){TriggerType = AdoTriggerType.PathInclude,Value = "PathIncludeTrigger"},
             new AdoTrigger(){TriggerType = AdoTriggerType.PathExclude,Value = "PathExcludeTrigger"},

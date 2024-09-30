@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Reflection;
 using System.Reflection.Metadata.Ecma335;
+using System.Runtime.Serialization;
 using PipelineWeaver.Ado;
 using PipelineWeaver.Core.Transpiler.Ado.Yaml.SectionSerializers.Interfaces;
 
@@ -36,7 +37,9 @@ public class AdoParameterSerializer : IAdoYamlSectionSerializer
         {
             var type = p.GetType();
             if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(AdoObjectParameter<>))
-                typeof(AdoParameterSerializer).CallGenericMethod(methodName: nameof(AppendObjectParameter), genericType: type, parameters: [p, startingIndent + 2]);
+            {
+                typeof(AdoParameterSerializer).CallGenericMethod(instance: this, methodName: nameof(AppendObjectParameter), genericType: type, parameters: [p, startingIndent + 2]);
+            }
             else
                 switch (p)
                 {
@@ -53,7 +56,6 @@ public class AdoParameterSerializer : IAdoYamlSectionSerializer
     }
 
 
-
     private void AppendStringParameter(AdoStringParameter parameter, int startingIndent)
     {
         _builder.AppendLine(startingIndent, parameter.Name + ": " + parameter.Value);
@@ -64,12 +66,12 @@ public class AdoParameterSerializer : IAdoYamlSectionSerializer
         _builder.AppendLine(startingIndent, parameter.Name + ": " + parameter.Value);
     }
 
-    private void AppendObjectParameter<T>(AdoObjectParameter<T> parameter, int startingIndent) where T : AdoObjectBase
+    public void AppendObjectParameter<T>(AdoObjectParameter<T> parameter, int startingIndent)
     {
         if (parameter.Value is null) return;
 
         _builder.AppendLine(startingIndent, parameter.Name + ":");
-        _builder.Append(startingIndent + 2, parameter.Value);
+        _builder.Append(startingIndent + 2, parameter);
     }
 
     internal void AppendTemplateParameters(AdoSectionCollection<AdoTemplateParameterBase> parameters, int startingIndent)
@@ -79,7 +81,7 @@ public class AdoParameterSerializer : IAdoYamlSectionSerializer
         {
             var type = p.GetType();
             if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(AdoObjectTemplateParameter<>))
-                typeof(AdoParameterSerializer).CallGenericMethod(methodName: nameof(AppendObjectTemplateParameter), genericType: type, parameters: [p, startingIndent + 2]);
+                typeof(AdoParameterSerializer).CallGenericMethod(this, methodName: nameof(AppendObjectTemplateParameter), genericType: type, parameters: [p, startingIndent + 2]);
             else
             {
                 switch (p)
@@ -113,7 +115,7 @@ public class AdoParameterSerializer : IAdoYamlSectionSerializer
             _builder.AppendLine(startingIndent + 2, $"default: {parameter.Default}");
     }
 
-    private void AppendObjectTemplateParameter<T>(AdoObjectTemplateParameter<T> parameter, int startingIndent) where T : AdoObjectBase
+    private void AppendObjectTemplateParameter<T>(AdoObjectTemplateParameter<T> parameter, int startingIndent)
     {
         _builder.AppendLine(startingIndent, $"- name: {parameter.Name}");
         _builder.AppendLine(startingIndent + 2, $"type: object");
