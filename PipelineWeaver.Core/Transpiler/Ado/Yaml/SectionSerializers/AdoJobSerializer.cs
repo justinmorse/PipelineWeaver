@@ -81,7 +81,7 @@ namespace PipelineWeaver.Core.Transpiler.Ado.Yaml.SectionSerializers
                     _builder.AppendLine(startingIndent + 6, "maxParallel: " + job.Strategy.MaxParallel);
             }
 
-            if (job.Steps?.Count() > 0)
+            if (job.Steps?.Count > 0)
             {
                 _builder.AppendLine(startingIndent + 4, "steps:");
                 _builder.Append(startingIndent + 6, job.Steps);

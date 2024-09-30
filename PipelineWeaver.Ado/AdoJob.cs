@@ -10,7 +10,7 @@ public abstract class AdoJobBase
     public bool? ContinueOnError { get; set; }
     public int? TimeoutInMinutes { get; set; }
     public int? CancelTimeoutInMinutes { get; set; }
-    public AdoSectionCollection<AdoVariableBase>? Variables { get; set; }
+    public AdoSectionCollection<IAdoVariable>? Variables { get; set; }
     public string? Pool { get; set; }
     public AdoWorkspace? Workspace { get; set; }
 

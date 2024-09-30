@@ -10,7 +10,7 @@ namespace PipelineWeaver.Core.Transpiler.Ado.Yaml.SectionSerializers
 {
     public class AdoStageSerializer : IAdoYamlSectionSerializer
     {
-        public AdoYamlBuilder _builder = new AdoYamlBuilder();
+        private AdoYamlBuilder _builder = new AdoYamlBuilder();
 
         public void AppendSection(AdoSectionBase section, AdoYamlBuilder? builder, int startingIndent)
         {
@@ -18,7 +18,7 @@ namespace PipelineWeaver.Core.Transpiler.Ado.Yaml.SectionSerializers
             if (builder is not null)
                 _builder = builder;
 
-            if (stage?.Count > 0)
+            if (stage.Count > 0)
             {
                 _builder.AppendLine(startingIndent, "stages:");
                 AppendStages(stage, startingIndent + 2);

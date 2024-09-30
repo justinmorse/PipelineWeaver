@@ -2,18 +2,18 @@ using System;
 
 namespace PipelineWeaver.Ado;
 
-public abstract class AdoPoolBase
+public interface IAdoPool
 {
     //empty
 }
 
-public class AdoNamedPool : AdoPoolBase
+public class AdoNamedPool : IAdoPool
 {
     public string? Name { get; set; }
     public List<string>? Demands { get; set; }
 }
 
-public class AdoHostedPool : AdoPoolBase
+public class AdoHostedPool : IAdoPool
 {
     public string? VmImage { get; set; }
 }

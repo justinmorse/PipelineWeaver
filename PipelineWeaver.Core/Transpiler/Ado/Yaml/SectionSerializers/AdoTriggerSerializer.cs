@@ -31,7 +31,7 @@ namespace PipelineWeaver.Core.Transpiler.Ado.Yaml.SectionSerializers
         private void AppendTagTriggers(AdoTriggerContainer triggers, int startingIndent)
         {
             var tagTriggers = triggers.Where(t => t.TriggerType == AdoTriggerType.TagInclude || t.TriggerType == AdoTriggerType.TagExclude);
-            if (tagTriggers.Count() == 0)
+            if (!tagTriggers.Any())
                 return;
 
             _builder.AppendLine(startingIndent, "tags:");
@@ -44,7 +44,7 @@ namespace PipelineWeaver.Core.Transpiler.Ado.Yaml.SectionSerializers
         private void AppendPathTriggers(AdoTriggerContainer triggers, int startingIndent)
         {
             var pathTriggers = triggers.Where(t => t.TriggerType == AdoTriggerType.PathInclude || t.TriggerType == AdoTriggerType.PathExclude);
-            if (pathTriggers.Count() == 0)
+            if (!pathTriggers.Any())
                 return;
 
             _builder.AppendLine(startingIndent, "paths:");
@@ -57,7 +57,7 @@ namespace PipelineWeaver.Core.Transpiler.Ado.Yaml.SectionSerializers
         private void AppendBranchTriggers(AdoTriggerContainer triggers, int startingIndent)
         {
             var branchTriggers = triggers.Where(t => t.TriggerType == AdoTriggerType.BranchInclude || t.TriggerType == AdoTriggerType.BranchExclude);
-            if (branchTriggers.Count() == 0)
+            if (!branchTriggers.Any())
                 return;
 
             _builder.AppendLine(startingIndent, "branches:");

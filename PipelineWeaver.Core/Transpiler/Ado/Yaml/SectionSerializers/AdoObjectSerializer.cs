@@ -15,25 +15,39 @@ public class AdoObjectSerializer : IAdoYamlSectionSerializer
         if (builder is not null)
             _builder = builder;
 
-        _builder.AppendLine(startingIndent, SerializeObjectToYaml(section, startingIndent));
+        var objSection = section as AdoObjectBase ?? throw new ArgumentException(nameof(section));
+
+        _builder.AppendLine(startingIndent, SerializeAdoObjectToYaml(objSection, startingIndent));
     }
 
-
-
-    private static string SerializeObjectToYaml(object obj, int startingIndent)
+    private static string SerializeAdoObjectToYaml(AdoObjectBase obj, int startingIndent)
     {
+        if (obj is AdoObject<object> adoObj)
+            return SerializeCSharpObjectToYaml(adoObj.Value, startingIndent);
+
+        if (obj is AdoJsonObject<object> jsonObj)
+            return jsonObj.HasValue ? jsonObj.Value?.ToJson() ?? string.Empty : string.Empty;
+
+        return string.Empty;
+    }
+
+    private static string SerializeCSharpObjectToYaml(object? obj, int startingIndent)
+    {
+        if (obj is null)
+            return string.Empty;
+
         var innerDoc = new AdoYamlBuilder();
 
         switch (obj)
         {
-            case Dictionary<string, string> dict:
-                innerDoc.AppendKeyValuePairs(null, startingIndent, dict);
+            case AdoObject<Dictionary<string, string>> dict:
+                innerDoc.AppendKeyValuePairs(null, startingIndent, dict.Value);
                 break;
-            case List<string> list:
-                innerDoc.AppendList(null, startingIndent, list);
+            case AdoObject<List<string>> list:
+                innerDoc.AppendList(null, startingIndent, list.Value);
                 break;
             default:
-                SeralizeComplexObjectToAdo(startingIndent, obj);
+                innerDoc.AppendLine(startingIndent, SeralizeComplexObjectToAdo(startingIndent, obj));
                 break;
         }
 
@@ -114,21 +128,21 @@ public class AdoObjectSerializer : IAdoYamlSectionSerializer
             var array = (Array)obj;
             foreach (var item in array)
             {
-                innerDoc.AppendLine(startingIndent, $"- {SerializeObjectToYaml(item, startingIndent)}");
+                innerDoc.AppendLine(startingIndent, $"- {SerializeCSharpObjectToYaml(item, startingIndent)}");
             }
         }
-        else if (obj is IList)
+        else if (obj is IList list1)
         {
             innerDoc.AppendLine(startingIndent, $"{propertyName}:");
-            var list = (IList)obj;
+            var list = list1;
             foreach (var item in list)
             {
-                innerDoc.AppendLine(startingIndent, $"- {SerializeObjectToYaml(item, startingIndent)}");
+                innerDoc.AppendLine(startingIndent, $"- {SerializeCSharpObjectToYaml(item, startingIndent)}");
             }
         }
         else
         {
-            SerializeObjectToYaml(obj, startingIndent);
+            SerializeCSharpObjectToYaml(obj, startingIndent);
         }
 
     }

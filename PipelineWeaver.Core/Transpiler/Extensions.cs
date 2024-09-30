@@ -28,10 +28,15 @@ public static class StringExtensions
     }
 }
 
-public static class DictionaryExtensions
+public static class AdoObjectExtensions
 {
-    public static string ToJson(this Dictionary<string, object> dict)
+    public static string ToJson(this object obj)
     {
-        return JsonSerializer.Serialize(dict);
+        return JsonSerializer.Serialize(obj);
+    }
+
+    public static string ToJson<T>(this T obj)
+    {
+        return JsonSerializer.Serialize(obj);
     }
 }

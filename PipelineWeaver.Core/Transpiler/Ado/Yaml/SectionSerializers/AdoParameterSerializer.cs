@@ -21,12 +21,12 @@ public class AdoParameterSerializer : IAdoYamlSectionSerializer
             case AdoSectionCollection<AdoParameterBase> parameters:
                 AppendParameters(parameters, startingIndent);
                 break;
-            case AdoSectionCollection<AdoTemplateParameter> templateParameters:
+            case AdoSectionCollection<AdoTemplateParameterBase> templateParameters:
                 AppendTemplateParameters(templateParameters, startingIndent);
                 break;
             default:
                 throw new ArgumentException(nameof(section));
-        };
+        }
     }
 
     internal void AppendParameters(AdoSectionCollection<AdoParameterBase> parameters, int startingIndent)
@@ -72,7 +72,7 @@ public class AdoParameterSerializer : IAdoYamlSectionSerializer
         _builder.Append(startingIndent + 2, parameter.Value);
     }
 
-    internal void AppendTemplateParameters(AdoSectionCollection<AdoTemplateParameter> parameters, int startingIndent)
+    internal void AppendTemplateParameters(AdoSectionCollection<AdoTemplateParameterBase> parameters, int startingIndent)
     {
         _builder.AppendLine(startingIndent, "parameters:");
         foreach (var p in parameters)

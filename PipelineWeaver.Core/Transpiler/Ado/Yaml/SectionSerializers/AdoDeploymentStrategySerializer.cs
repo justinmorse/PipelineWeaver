@@ -8,16 +8,13 @@ namespace PipelineWeaver.Core.Transpiler.Ado.Yaml.SectionSerializers;
 public class AdoDeploymentStrategySerializer : IAdoYamlSectionSerializer
 {
     internal AdoYamlBuilder _builder = new AdoYamlBuilder();
-    public void AppendSection(AdoSectionBase section, AdoYamlBuilder? builder, int startingIndentation)
+    public void AppendSection(AdoSectionBase section, AdoYamlBuilder? builder, int startingIndent)
     {
         var deploymentStrategy = section as AdoDeploymentStrategyBase ?? throw new ArgumentException(nameof(section));
         if (builder is not null)
             _builder = builder;
 
-        if (deploymentStrategy is not null)
-        {
-            AppendDeploymentStrategies(deploymentStrategy, startingIndentation);
-        }
+        AppendDeploymentStrategies(deploymentStrategy, startingIndent);
     }
 
     private void AppendDeploymentStrategies(AdoDeploymentStrategyBase deploymentStrategy, int startingIndentation)

@@ -19,7 +19,7 @@ public class AdoYamlBuilder
     {
         if (section is null) return;
 
-        section?.AppendSection(this, startingIndent);
+        section.AppendSection(this, startingIndent);
     }
 
     public void AppendLine(int indention, string? line)

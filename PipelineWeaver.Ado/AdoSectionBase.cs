@@ -11,7 +11,7 @@ public abstract class AdoSectionBase
 public class AdoSectionCollection<T> : AdoSectionBase, ICollection<T>
 {
     internal List<T> Items { get; set; } = [];
-    public int Count => Items.Count();
+    public int Count => Items.Count;
 
     public bool IsReadOnly => false;
 

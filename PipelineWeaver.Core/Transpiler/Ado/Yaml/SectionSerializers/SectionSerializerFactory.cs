@@ -3,23 +3,23 @@ using PipelineWeaver.Core.Transpiler.Ado.Yaml.SectionSerializers.Interfaces;
 
 namespace PipelineWeaver.Core.Transpiler.Ado.Yaml.SectionSerializers;
 
-public class SectionSerializerFactory
+public static class SectionSerializerFactory
 {
     public static IAdoYamlSectionSerializer GetSerializer(AdoSectionBase section)
     {
         switch (section)
         {
             case AdoPipeline _: return new AdoPipelineSerializer();
-            case AdoSectionCollection<AdoVariableBase> _: return new AdoVariableSectionSerializer();
+            case AdoSectionCollection<IAdoVariable> _: return new AdoVariableSectionSerializer();
             case AdoTriggerContainer _: return new AdoTriggerSerializer();
-            case AdoSectionCollection<AdoResourceBase> _: return new AdoResourceSerializer();
+            case AdoSectionCollection<IAdoResource> _: return new AdoResourceSerializer();
             case AdoSectionCollection<AdoStageBase> _: return new AdoStageSerializer();
             case AdoSectionCollection<AdoJobBase> _: return new AdoJobSerializer();
-            case AdoSectionCollection<AdoPoolBase> _: return new AdoPoolSerializer();
+            case AdoSectionCollection<IAdoPool> _: return new AdoPoolSerializer();
             case AdoSectionCollection<AdoStepBase> _: return new AdoStepSerializer();
             case AdoSectionCollection<AdoDeploymentStrategyBase> _: return new AdoDeploymentStrategySerializer();
             case AdoSectionCollection<AdoParameterBase> _: return new AdoParameterSerializer();
-            case AdoSectionCollection<AdoTemplateParameter> _: return new AdoParameterSerializer();
+            case AdoSectionCollection<AdoTemplateParameterBase> _: return new AdoParameterSerializer();
 
             default: throw new NotImplementedException();
         }

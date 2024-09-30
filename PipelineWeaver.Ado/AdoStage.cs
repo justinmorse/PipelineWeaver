@@ -12,12 +12,12 @@ public class AdoStage : AdoStageBase
 {
     public required string Stage { get; set; }
     public string? DisplayName { get; set; }
-    public AdoSectionCollection<AdoVariableBase>? Variables { get; set; }
+    public AdoSectionCollection<IAdoVariable>? Variables { get; set; }
     public string? LockBehavior { get; set; }
     public string? Trigger { get; set; }
     public bool? IsSkippable { get; set; }
     public string? TemplateContext { get; set; }
-    public AdoSectionCollection<AdoPoolBase>? Pools { get; set; }
+    public AdoSectionCollection<IAdoPool>? Pools { get; set; }
     public AdoSectionCollection<AdoJobBase>? Jobs { get; set; }
 
 }

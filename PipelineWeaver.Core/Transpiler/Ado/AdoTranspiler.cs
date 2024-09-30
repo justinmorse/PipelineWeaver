@@ -12,11 +12,5 @@ public class AdoTranspiler
     {
         Section = pipeline;
     }
-
-    // public void Transpile()
-    // {
-    //     Document.BuildDocument(Section);
-    // }
-    //}
 }
 

@@ -2,12 +2,12 @@ using System;
 
 namespace PipelineWeaver.Ado;
 
-public abstract class AdoResourceBase
+public interface IAdoResource
 {
     //Left empty 
 }
 
-public class AdoPipelineResource : AdoResourceBase
+public class AdoPipelineResource : IAdoResource
 {
     public required string Pipeline { get; set; }
     public required string Connection { get; set; }
@@ -22,7 +22,7 @@ public class AdoPipelineResource : AdoResourceBase
 
 }
 
-public class AdoBuildResource : AdoResourceBase
+public class AdoBuildResource : IAdoResource
 {
     public required string Build { get; set; }
     public string? Type { get; set; }
@@ -31,7 +31,7 @@ public class AdoBuildResource : AdoResourceBase
     public bool? Trigger { get; set; }
 }
 
-public class AdoRepositoryResource : AdoResourceBase
+public class AdoRepositoryResource : IAdoResource
 {
     public required string Repository { get; set; }
     public string? Ref { get; set; }
@@ -43,7 +43,7 @@ public class AdoRepositoryResource : AdoResourceBase
     public string? Project { get; set; }
 }
 
-public class AdoPackageResource : AdoResourceBase
+public class AdoPackageResource : IAdoResource
 {
     public required string Package { get; set; }
     public string? Type { get; set; }
@@ -53,7 +53,7 @@ public class AdoPackageResource : AdoResourceBase
     public string? Tag { get; set; }
 }
 
-public class AdoContainerResource : AdoResourceBase
+public class AdoContainerResource : IAdoResource
 {
     public required string Container { get; set; }
     public string? Connection { get; set; }
