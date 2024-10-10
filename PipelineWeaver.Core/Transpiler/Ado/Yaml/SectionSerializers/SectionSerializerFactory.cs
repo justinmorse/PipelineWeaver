@@ -19,7 +19,7 @@ public static class SectionSerializerFactory
             case AdoSectionCollection<AdoStepBase> _: return new AdoStepSerializer();
             case AdoSectionCollection<AdoDeploymentStrategyBase> _: return new AdoDeploymentStrategySerializer();
             case AdoSectionCollection<AdoParameterBase> _: return new AdoParameterSerializer();
-            case AdoSectionCollection<AdoTemplateParameterBase> _: return new AdoParameterSerializer();
+            //case AdoSectionCollection<AdoTemplateParameterBase> _: return new AdoParameterSerializer();
             case AdoSectionCollection<AdoTriggerBase> _: return new AdoTriggerSerializer();
             default: throw new NotImplementedException();
         }

@@ -55,7 +55,7 @@ namespace PipelineWeaver.Core.Transpiler.Ado.Yaml.SectionSerializers
             _builder.AppendLine(startingIndent, "- template: " + stage.Template);
             if (stage.Parameters?.Count > 0)
             {
-                _builder.AppendList("parameters", 2 + startingIndent, stage.Parameters);
+                _builder.AppendArray("parameters", 2 + startingIndent, stage.Parameters.ToArray());
             }
             AppendBaseFields(stage, startingIndent);
         }
@@ -86,7 +86,7 @@ namespace PipelineWeaver.Core.Transpiler.Ado.Yaml.SectionSerializers
         private void AppendBaseFields(AdoStageBase stage, int startingIndent)
         {
             if (stage.DependsOn?.Count > 0)
-                _builder.AppendList("dependsOn", 2 + startingIndent, stage.DependsOn);
+                _builder.AppendArray("dependsOn", 2 + startingIndent, stage.DependsOn.ToArray());
             if (string.IsNullOrEmpty(stage.Condition))
                 _builder.AppendLine(startingIndent + 2, "condition: " + stage.Condition);
         }

@@ -36,9 +36,9 @@ namespace PipelineWeaver.Core.Transpiler.Ado.Yaml.SectionSerializers
 
             _builder.AppendLine(startingIndent, "tags:");
             if (tagTriggers.Any(t => t.TriggerType == AdoTriggerType.TagInclude))
-                _builder.AppendList("include", 2 + startingIndent, tagTriggers.Where(t => t.TriggerType == AdoTriggerType.TagInclude).Select(t => t.Value).ToList());
+                _builder.AppendArray("include", 2 + startingIndent, tagTriggers.Where(t => t.TriggerType == AdoTriggerType.TagInclude).Select(t => t.Value).ToArray());
             if (tagTriggers.Any(t => t.TriggerType == AdoTriggerType.TagExclude))
-                _builder.AppendList("exclude", 2 + startingIndent, tagTriggers.Where(t => t.TriggerType == AdoTriggerType.TagExclude).Select(t => t.Value).ToList());
+                _builder.AppendArray("exclude", 2 + startingIndent, tagTriggers.Where(t => t.TriggerType == AdoTriggerType.TagExclude).Select(t => t.Value).ToArray());
         }
 
         private void AppendPathTriggers(AdoTriggerContainer triggers, int startingIndent)
@@ -49,9 +49,9 @@ namespace PipelineWeaver.Core.Transpiler.Ado.Yaml.SectionSerializers
 
             _builder.AppendLine(startingIndent, "paths:");
             if (pathTriggers.Any(t => t.TriggerType == AdoTriggerType.PathInclude))
-                _builder.AppendList("include", 2 + startingIndent, pathTriggers.Where(t => t.TriggerType == AdoTriggerType.PathInclude).Select(t => t.Value).ToList());
+                _builder.AppendArray("include", 2 + startingIndent, pathTriggers.Where(t => t.TriggerType == AdoTriggerType.PathInclude).Select(t => t.Value).ToArray());
             if (pathTriggers.Any(t => t.TriggerType == AdoTriggerType.PathExclude))
-                _builder.AppendList("exclude", 2 + startingIndent, pathTriggers.Where(t => t.TriggerType == AdoTriggerType.PathExclude).Select(t => t.Value).ToList());
+                _builder.AppendArray("exclude", 2 + startingIndent, pathTriggers.Where(t => t.TriggerType == AdoTriggerType.PathExclude).Select(t => t.Value).ToArray());
         }
 
         private void AppendBranchTriggers(AdoTriggerContainer triggers, int startingIndent)
@@ -62,9 +62,9 @@ namespace PipelineWeaver.Core.Transpiler.Ado.Yaml.SectionSerializers
 
             _builder.AppendLine(startingIndent, "branches:");
             if (branchTriggers.Any(t => t.TriggerType == AdoTriggerType.BranchInclude))
-                _builder.AppendList("include", 2 + startingIndent, branchTriggers.Where(t => t.TriggerType == AdoTriggerType.BranchInclude).Select(t => t.Value).ToList());
+                _builder.AppendArray("include", 2 + startingIndent, branchTriggers.Where(t => t.TriggerType == AdoTriggerType.BranchInclude).Select(t => t.Value).ToArray());
             if (branchTriggers.Any(t => t.TriggerType == AdoTriggerType.BranchExclude))
-                _builder.AppendList("exclude", 2 + startingIndent, branchTriggers.Where(t => t.TriggerType == AdoTriggerType.BranchExclude).Select(t => t.Value).ToList());
+                _builder.AppendArray("exclude", 2 + startingIndent, branchTriggers.Where(t => t.TriggerType == AdoTriggerType.BranchExclude).Select(t => t.Value).ToArray());
         }
     }
 }

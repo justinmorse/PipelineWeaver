@@ -22,9 +22,9 @@ public class AdoParameterSerializer : IAdoYamlSectionSerializer
             case AdoSectionCollection<AdoParameterBase> parameters:
                 AppendParameters(parameters, startingIndent);
                 break;
-            case AdoSectionCollection<AdoTemplateParameterBase> templateParameters:
-                AppendTemplateParameters(templateParameters, startingIndent);
-                break;
+            //case AdoSectionCollection<AdoTemplateParameterBase> templateParameters:
+            //AppendTemplateParameters(templateParameters, startingIndent);
+            //break;
             default:
                 throw new ArgumentException(nameof(section));
         }
@@ -36,9 +36,20 @@ public class AdoParameterSerializer : IAdoYamlSectionSerializer
         foreach (var p in parameters)
         {
             var type = p.GetType();
-            if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(AdoObjectParameter<>))
+            if (type.IsGenericType)
             {
-                typeof(AdoParameterSerializer).CallGenericMethod(instance: this, methodName: nameof(AppendObjectParameter), genericType: type, parameters: [p, startingIndent + 2]);
+                var genericInternalType = type.GetGenericArguments()[0];
+                if (type.GetGenericTypeDefinition() == typeof(AdoObjectParameter<>))
+                    CallGenericMethod(methodName: nameof(AppendObjectParameter), genericType: type, parameters: [p, startingIndent + 2]);
+                else if (type.GetGenericTypeDefinition() == typeof(AdoArrayParameter<>))
+                    CallGenericMethod(methodName: nameof(AppendArrayParameter), genericType: type, parameters: [p, startingIndent + 2]);
+                else if (type.GetGenericTypeDefinition() == typeof(AdoDictionaryParameter<>))
+                {
+                    if (genericInternalType != typeof(AdoObject<>))
+                        CallGenericMethod(methodName: nameof(AppendDictionaryParameter), genericType: type, parameters: [p, startingIndent + 2]);
+                    else
+                        CallGenericMethod(methodName: nameof(AppendObjectDictionaryParameter), genericType: type, parameters: [p, startingIndent + 2]);
+                }
             }
             else
                 switch (p)
@@ -55,6 +66,11 @@ public class AdoParameterSerializer : IAdoYamlSectionSerializer
         }
     }
 
+    internal void CallGenericMethod(string methodName, Type genericType, params object[] parameters)
+    {
+        typeof(AdoParameterSerializer).CallGenericMethod(this, methodName, genericType, parameters);
+    }
+
 
     private void AppendStringParameter(AdoStringParameter parameter, int startingIndent)
     {
@@ -66,15 +82,35 @@ public class AdoParameterSerializer : IAdoYamlSectionSerializer
         _builder.AppendLine(startingIndent, parameter.Name + ": " + parameter.Value);
     }
 
+    private void AppendArrayParameter<T>(AdoArrayParameter<T> parameter, int startingIndent)
+    {
+        _builder.AppendArray(parameter.Name, startingIndent, parameter.Value);
+    }
+
+    private void AppendDictionaryParameter<T>(AdoDictionaryParameter<T> parameter, int startingIndent)
+    {
+        _builder.AppendKeyValuePairs(parameter.Name, startingIndent, parameter.Value);
+    }
+
+    private void AppendObjectDictionaryParameter<T>(AdoDictionaryParameter<T> parameter, int startingIndent)
+    {
+        var newDict = new Dictionary<string, AdoObject<T>>();
+        foreach (var kvp in parameter.Value)
+            newDict.Add(kvp.Key, new AdoObject<T>(kvp.Value));
+        _builder.AppendObjectKeyValuePairs<T>(parameter.Name, startingIndent, newDict);
+    }
+
     public void AppendObjectParameter<T>(AdoObjectParameter<T> parameter, int startingIndent)
     {
         if (parameter.Value is null) return;
 
         _builder.AppendLine(startingIndent, parameter.Name + ":");
-        _builder.Append(startingIndent + 2, parameter);
+        var serializer = new AdoObjectSerializer();
+        var s = serializer.Serialize(new AdoObject<T>(parameter.Value), startingIndent);
+        _builder.AppendLine(startingIndent, s);
     }
 
-    internal void AppendTemplateParameters(AdoSectionCollection<AdoTemplateParameterBase> parameters, int startingIndent)
+    /* internal void AppendTemplateParameters(AdoSectionCollection<AdoTemplateParameterBase> parameters, int startingIndent)
     {
         _builder.AppendLine(startingIndent, "parameters:");
         foreach (var p in parameters)
@@ -97,9 +133,9 @@ public class AdoParameterSerializer : IAdoYamlSectionSerializer
                 }
             }
         }
-    }
+    } */
 
-    private void AppendStringTemplateParameter(AdoStringTemplateParameter parameter, int startingIndent)
+    /* private void AppendStringTemplateParameter(AdoStringTemplateParameter parameter, int startingIndent)
     {
         _builder.AppendLine(startingIndent, $"- name: {parameter.Name}");
         _builder.AppendLine(startingIndent + 2, $"type: string");
@@ -124,7 +160,7 @@ public class AdoParameterSerializer : IAdoYamlSectionSerializer
             _builder.AppendLine(startingIndent + 2, $"default:");
             _builder.Append(startingIndent + 4, parameter.Default);
         }
-    }
+    } */
 }
 
 

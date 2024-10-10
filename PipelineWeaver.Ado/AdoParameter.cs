@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Threading.Tasks;
 
 namespace PipelineWeaver.Ado
@@ -8,6 +9,7 @@ namespace PipelineWeaver.Ado
     public abstract class AdoParameterBase : AdoSectionBase
     {
         public required string Name { get; set; }
+
     }
 
     public class AdoStringParameter : AdoParameterBase
@@ -19,29 +21,51 @@ namespace PipelineWeaver.Ado
         public required bool Value { get; set; }
     }
 
+    public class AdoArrayParameter<T> : AdoParameterBase
+    {
+        public required T[] Value { get; set; }
+    }
+
+    public class AdoDictionaryParameter<T> : AdoParameterBase
+    {
+        private Dictionary<string, T> mvalue = new();
+
+        public required Dictionary<string, T> Value
+        {
+            get => mvalue;
+            set
+            {
+                //ParameterHelpers.CheckValueIsCorrectType<T>();
+                mvalue = value;
+            }
+        }
+    }
+
     public class AdoObjectParameter<T> : AdoParameterBase
     {
-        public AdoObject<T> Value { get; set; }
+        public T Value { get; set; }
 
         public AdoObjectParameter(T value)
         {
-            Value = new AdoObject<T>(value);
+            Value = value;
         }
     }
 
     public class AdoJsonObjectParameter<T> : AdoParameterBase
     {
-        public required AdoJsonObject<T> Value { get; set; }
+        public required T Value { get; set; }
+        public bool SerializeAsSingleLine { get; set; }
 
         public AdoJsonObjectParameter(T value, bool serializeAsSingleLine)
         {
-            Value = new AdoJsonObject<T>(value, serializeAsSingleLine);
+            Value = value;
+            SerializeAsSingleLine = serializeAsSingleLine;
         }
     }
 
 
 
-    public abstract class AdoTemplateParameterBase
+    /* public abstract class AdoTemplateParameterBase
     {
         public required string Name { get; set; }
 
@@ -76,4 +100,19 @@ namespace PipelineWeaver.Ado
             Default = new AdoJsonObject<T>(defaultValue, serializeAsSingleLine);
         }
     }
+
+    public static class ParameterHelpers
+    {
+
+        public static void CheckValueIsCorrectType<T>()
+        {
+            if (typeof(T).IsArray || typeof(T).IsGenericType && typeof(T).GetGenericTypeDefinition() == typeof(IList<>))
+                throw new ArgumentException($"Value cannot be an array or list. Use {typeof(AdoArrayParameter<>)} instead.");
+
+            if ((typeof(T).IsClass || typeof(T).IsInterface) && !typeof(T).IsAssignableTo(typeof(AdoObjectBase)))
+                throw new ArgumentException($"Value cannot be an object directly. Use {typeof(AdoObject<>)} wrapper instead.");
+        }
+    }
+ */
+
 }

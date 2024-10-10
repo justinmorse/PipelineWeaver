@@ -3,32 +3,37 @@ using System.Collections;
 using System.Reflection;
 using PipelineWeaver.Ado;
 using PipelineWeaver.Core.Transpiler.Ado.Yaml.SectionSerializers.Interfaces;
+using PipelineWeaver.Core.Transpiler.Yaml;
 
 namespace PipelineWeaver.Core.Transpiler.Ado.Yaml.SectionSerializers;
 
-public class AdoObjectSerializer : IAdoYamlSectionSerializer
+public class AdoObjectSerializer
 {
     internal AdoYamlBuilder _builder = new AdoYamlBuilder();
 
-    public void AppendSection(AdoSectionBase section, AdoYamlBuilder? builder, int startingIndent)
+    public string Serialize(AdoObjectBase obj, int startingIndent)
     {
-        if (builder is not null)
-            _builder = builder;
+        _builder.AppendLine(startingIndent, SerializeAdoObjectToYaml(obj, 0));
 
-        var objSection = section as AdoObjectBase ?? throw new ArgumentException(nameof(section));
-
-        _builder.AppendLine(startingIndent, SerializeAdoObjectToYaml(objSection, startingIndent));
+        return _builder.ToString();
     }
 
     private static string SerializeAdoObjectToYaml(AdoObjectBase obj, int startingIndent)
     {
-        if (obj is AdoObject<object> adoObj)
-            return SerializeCSharpObjectToYaml(adoObj.Value, startingIndent);
-
-        if (obj is AdoJsonObject<object> jsonObj)
+        var objType = obj.GetType().GetGenericTypeDefinition();
+        if (objType == typeof(AdoObject<>))
+        {
+            dynamic objValue = obj;
+            return SerializeCSharpObjectToYaml(objValue.Value, startingIndent);
+        }
+        if (objType == typeof(AdoJsonObject<>))
+        {
+            dynamic jsonObj = obj;
             return jsonObj.HasValue ? jsonObj.Value?.ToJson() ?? string.Empty : string.Empty;
+        }
 
-        return string.Empty;
+
+        throw new ArgumentException(nameof(obj));
     }
 
     private static string SerializeCSharpObjectToYaml(object? obj, int startingIndent)
@@ -44,36 +49,40 @@ public class AdoObjectSerializer : IAdoYamlSectionSerializer
                 innerDoc.AppendKeyValuePairs(null, startingIndent, dict.Value);
                 break;
             case AdoObject<List<string>> list:
-                innerDoc.AppendList(null, startingIndent, list.Value);
+                innerDoc.AppendArray(null, startingIndent, list.Value?.ToArray());
+                break;
+            case AdoObject<string[]> array:
+                innerDoc.AppendArray(null, startingIndent, array.Value);
+                break;
+            case AdoObject<int[]> array:
+                innerDoc.AppendArray(null, startingIndent, array.Value?.Select(i => i.ToString()).ToArray());
                 break;
             default:
-                innerDoc.AppendLine(startingIndent, SeralizeComplexObjectToAdo(startingIndent, obj));
+                AppendComplexObjectToAdo(innerDoc, startingIndent, obj);
                 break;
         }
 
         return innerDoc.ToString();
     }
 
-    private static string SeralizeComplexObjectToAdo(int startingIndent, object obj)
+    private static void AppendComplexObjectToAdo(AdoYamlBuilder doc, int startingIndent, object obj)
     {
-        var innerDoc = new AdoYamlBuilder();
         Type type = obj.GetType();
         PropertyInfo[] properties = type.GetProperties();
-
         foreach (var property in properties)
         {
-            innerDoc.AppendLine(startingIndent, PropertyToParameterStyleString(property.Name, property.GetType(), property.GetValue(obj), startingIndent));
+            var propType = property.PropertyType;
+            var propName = property.Name;
+            var propValue = property.GetValue(obj);
+            AppendPropertyToParameterStyleString(doc, propName, propType, propValue, startingIndent);
         }
-
-        return innerDoc.ToString();
     }
 
-    private static string PropertyToParameterStyleString(string propertyName, Type objType, object? obj, int startingIndent)
+    private static void AppendPropertyToParameterStyleString(AdoYamlBuilder doc, string propertyName, Type objType, object? obj, int startingIndent)
     {
         if (obj is null)
-            return string.Empty;
+            return;
 
-        var innerDoc = new AdoYamlBuilder();
         if (Nullable.GetUnderlyingType(objType) != null)
             objType = Nullable.GetUnderlyingType(objType)!;
 
@@ -93,16 +102,16 @@ public class AdoObjectSerializer : IAdoYamlSectionSerializer
             case TypeCode.Single:
             case TypeCode.Double:
             case TypeCode.Decimal:
-                innerDoc.AppendLine(startingIndent, $"{propertyName}: {obj}");
+                doc.AppendLine(startingIndent, $"{propertyName}: {obj}");
                 break;
             case TypeCode.DateTime:
                 {
                     var dateTime = (DateTime)obj;
-                    innerDoc.AppendLine(startingIndent, $"{propertyName}: {dateTime:yyyy-MM-dd HH:mm:ss}");
+                    doc.AppendLine(startingIndent, $"{propertyName}: {dateTime:yyyy-MM-dd HH:mm:ss}");
                 }
                 break;
             case TypeCode.Object:
-                PropertyToParameterStyleString_Obj(propertyName, objType, obj, startingIndent, innerDoc);
+                PropertyToParameterStyleString_Obj(propertyName, objType, obj, startingIndent, doc);
                 break;
 
             default:
@@ -110,7 +119,6 @@ public class AdoObjectSerializer : IAdoYamlSectionSerializer
 
 
         }
-        return innerDoc.ToString();
     }
 
     private static void PropertyToParameterStyleString_Obj(string propertyName, Type objType, object? obj, int startingIndent, AdoYamlBuilder innerDoc)
@@ -142,7 +150,8 @@ public class AdoObjectSerializer : IAdoYamlSectionSerializer
         }
         else
         {
-            SerializeCSharpObjectToYaml(obj, startingIndent);
+            innerDoc.AppendLine(startingIndent, $"{propertyName}:");
+            innerDoc.AppendLine(0, $"{SerializeCSharpObjectToYaml(obj, startingIndent + 2)}");
         }
 
     }

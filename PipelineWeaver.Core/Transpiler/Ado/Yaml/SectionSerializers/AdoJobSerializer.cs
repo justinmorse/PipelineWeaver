@@ -92,7 +92,7 @@ namespace PipelineWeaver.Core.Transpiler.Ado.Yaml.SectionSerializers
         {
             _builder.AppendLine(startingIndent + 4, "displayName: " + job.DisplayName);
             if (job.DependsOn?.Count > 0)
-                _builder.AppendList("dependsOn", 4 + startingIndent, job.DependsOn);
+                _builder.AppendArray("dependsOn", 4 + startingIndent, job.DependsOn.ToArray());
             if (string.IsNullOrEmpty(job.Condition))
                 _builder.AppendLine(startingIndent + 4, "condition: " + job.Condition);
             if (job.ContinueOnError ?? false)
@@ -121,9 +121,9 @@ namespace PipelineWeaver.Core.Transpiler.Ado.Yaml.SectionSerializers
                 if (!string.IsNullOrWhiteSpace(job.Container.Options))
                     _builder.AppendLine(startingIndent + 6, "options: " + job.Container.Options);
                 if (job.Container.Ports?.Count > 0)
-                    _builder.AppendList("ports", startingIndent + 6, job.Container.Ports);
+                    _builder.AppendArray("ports", startingIndent + 6, job.Container.Ports.ToArray());
                 if (job.Container.Volumes?.Count > 0)
-                    _builder.AppendList("volumes", startingIndent + 6, job.Container.Volumes);
+                    _builder.AppendArray("volumes", startingIndent + 6, job.Container.Volumes.ToArray());
                 if (job.Container.MountReadOnly is not null)
                 {
                     _builder.AppendLine(startingIndent + 6, "mountReadOnly:");
@@ -150,9 +150,9 @@ namespace PipelineWeaver.Core.Transpiler.Ado.Yaml.SectionSerializers
             {
                 _builder.AppendLine(startingIndent + 4, "uses:");
                 if (job.Uses.Repositories?.Count > 0)
-                    _builder.AppendList("repositories", startingIndent + 6, job.Uses.Repositories);
+                    _builder.AppendArray("repositories", startingIndent + 6, job.Uses.Repositories.ToArray());
                 if (job.Uses.Pools?.Count > 0)
-                    _builder.AppendList("pools", startingIndent + 6, job.Uses.Pools);
+                    _builder.AppendArray("pools", startingIndent + 6, job.Uses.Pools.ToArray());
             }
             if (!string.IsNullOrWhiteSpace(job.TemplateContext))
                 _builder.AppendLine(startingIndent + 4, "templateContext: " + job.TemplateContext);

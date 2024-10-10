@@ -3,9 +3,8 @@ using System.Text.Json;
 
 namespace PipelineWeaver.Ado;
 
-public abstract class AdoObjectBase : AdoSectionBase
+public abstract class AdoObjectBase
 {
-
 }
 
 public class AdoObject<T> : AdoObjectBase

@@ -11,7 +11,10 @@ public static class TypeExtensions
         var expectedParameterTypes = parameters?.Select(p => p.GetType()).ToArray() ?? Array.Empty<Type>();
 
         MethodInfo? method = null;
-        var methods = callerType.GetMethods();
+        var methods = callerType.GetMethods().ToList();
+        if (instance is not null)
+            methods.AddRange(callerType.GetMethods(BindingFlags.NonPublic | BindingFlags.Instance));
+
         foreach (var m in methods)
         {
             if (m.Name == methodName)

@@ -54,7 +54,7 @@ namespace PipelineWeaver.Core.Transpiler.Ado.Yaml.SectionSerializers
         internal void AppendPool(AdoNamedPool pool, int startingIndent)
         {
             _builder.AppendLine(startingIndent + 2, $"name: {pool.Name}");
-            _builder.AppendList("demands", startingIndent + 2, pool.Demands);
+            _builder.AppendArray("demands", startingIndent + 2, pool.Demands?.ToArray());
         }
     }
 }
