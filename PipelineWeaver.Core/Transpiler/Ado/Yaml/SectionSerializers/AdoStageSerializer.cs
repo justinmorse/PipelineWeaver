@@ -15,17 +15,16 @@ namespace PipelineWeaver.Core.Transpiler.Ado.Yaml.SectionSerializers
         public void AppendSection(AdoSectionBase section, AdoYamlBuilder? builder, int startingIndent)
         {
             var stage = section as AdoSectionCollection<AdoStageBase> ?? throw new ArgumentException(nameof(section));
-            if (builder is not null)
-                _builder = builder;
 
             if (stage.Count > 0)
             {
-                _builder.AppendLine(startingIndent, "stages:");
-                AppendStages(stage, startingIndent + 2);
+                _builder.AppendLine(0, "stages:");
+                AppendStages(stage);
+                builder.AppendLine(startingIndent, _builder.ToString(), true, true);
             }
         }
 
-        private void AppendStages(AdoSectionCollection<AdoStageBase> stages, int startingIndent)
+        private void AppendStages(AdoSectionCollection<AdoStageBase> stages)
         {
             if (stages?.Count > 0)
             {
@@ -35,12 +34,12 @@ namespace PipelineWeaver.Core.Transpiler.Ado.Yaml.SectionSerializers
                     {
                         case AdoStage stage:
                             {
-                                AppendStage(stage, startingIndent);
+                                AppendStage(stage);
                                 break;
                             }
                         case AdoStageTemplate stage:
                             {
-                                AppendStageTemplate(stage, startingIndent);
+                                AppendStageTemplate(stage);
                                 break;
                             }
                         default:
@@ -50,45 +49,45 @@ namespace PipelineWeaver.Core.Transpiler.Ado.Yaml.SectionSerializers
             }
         }
 
-        private void AppendStageTemplate(AdoStageTemplate stage, int startingIndent)
+        private void AppendStageTemplate(AdoStageTemplate stage)
         {
-            _builder.AppendLine(startingIndent, "- template: " + stage.Template);
+            _builder.AppendLine(0, "- template: " + stage.Template);
             if (stage.Parameters?.Count > 0)
             {
-                _builder.AppendArray("parameters", 2 + startingIndent, stage.Parameters.ToArray());
+                _builder.AppendArray("parameters", 2, stage.Parameters.ToArray());
             }
-            AppendBaseFields(stage, startingIndent);
+            AppendBaseFields(stage);
         }
 
-        private void AppendStage(AdoStage stage, int startingIndent)
+        private void AppendStage(AdoStage stage)
         {
-            _builder.AppendLine(startingIndent, "- stage: " + stage.Stage);
-            AppendBaseFields(stage, startingIndent);
+            _builder.AppendLine(0, "- stage: " + stage.Stage);
+            AppendBaseFields(stage);
             if (!string.IsNullOrWhiteSpace(stage.DisplayName))
-                _builder.AppendLine(startingIndent + 2, "displayName: " + stage.DisplayName);
-            if (stage.Variables is not null)
-                _builder.Append(startingIndent, stage.Variables);
+                _builder.AppendLine(2, "displayName: " + stage.DisplayName);
+            if (stage.Variables?.Count > 0)
+                _builder.Append(2, stage.Variables);
             if (!string.IsNullOrWhiteSpace(stage.LockBehavior))
-                _builder.AppendLine(startingIndent + 2, "lockBehavior: " + stage.LockBehavior);
+                _builder.AppendLine(2, "lockBehavior: " + stage.LockBehavior);
             if (!string.IsNullOrWhiteSpace(stage.Trigger))
-                _builder.AppendLine(startingIndent + 2, "trigger: " + stage.Trigger);
+                _builder.AppendLine(2, "trigger: " + stage.Trigger);
             if (stage.IsSkippable is not null)
-                _builder.AppendLine(startingIndent + 2, "isSkippable: " + stage.IsSkippable.Value);
+                _builder.AppendLine(2, "isSkippable: " + stage.IsSkippable.Value);
             if (!string.IsNullOrWhiteSpace(stage.TemplateContext))
-                _builder.AppendLine(startingIndent + 2, "templateContext: " + stage.TemplateContext);
+                _builder.AppendLine(2, "templateContext: " + stage.TemplateContext);
             if (stage.Pools is not null)
-                _builder.Append(startingIndent, stage.Pools);
+                _builder.Append(2, stage.Pools);
             if (stage.Jobs?.Count > 0)
-                _builder.Append(startingIndent, stage.Jobs);
+                _builder.Append(2, stage.Jobs);
 
         }
 
-        private void AppendBaseFields(AdoStageBase stage, int startingIndent)
+        private void AppendBaseFields(AdoStageBase stage)
         {
             if (stage.DependsOn?.Count > 0)
-                _builder.AppendArray("dependsOn", 2 + startingIndent, stage.DependsOn.ToArray());
+                _builder.AppendArray("dependsOn", 2, stage.DependsOn.ToArray());
             if (string.IsNullOrEmpty(stage.Condition))
-                _builder.AppendLine(startingIndent + 2, "condition: " + stage.Condition);
+                _builder.AppendLine(2, "condition: " + stage.Condition);
         }
     }
 }

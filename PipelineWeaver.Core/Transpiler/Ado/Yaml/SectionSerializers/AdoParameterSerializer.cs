@@ -14,13 +14,10 @@ public class AdoParameterSerializer : IAdoYamlSectionSerializer
 
     public void AppendSection(AdoSectionBase section, AdoYamlBuilder? builder, int startingIndent)
     {
-        if (builder is not null)
-            _builder = builder;
-
         switch (section)
         {
             case AdoSectionCollection<AdoParameterBase> parameters:
-                AppendParameters(parameters, startingIndent);
+                AppendParameters(parameters);
                 break;
             //case AdoSectionCollection<AdoTemplateParameterBase> templateParameters:
             //AppendTemplateParameters(templateParameters, startingIndent);
@@ -28,11 +25,12 @@ public class AdoParameterSerializer : IAdoYamlSectionSerializer
             default:
                 throw new ArgumentException(nameof(section));
         }
+        builder?.AppendLine(startingIndent, _builder.ToString(), true);
     }
 
-    internal void AppendParameters(AdoSectionCollection<AdoParameterBase> parameters, int startingIndent)
+    internal void AppendParameters(AdoSectionCollection<AdoParameterBase> parameters)
     {
-        _builder.AppendLine(startingIndent, "parameters:");
+        _builder.AppendLine(0, "parameters:");
         foreach (var p in parameters)
         {
             var type = p.GetType();
@@ -40,25 +38,25 @@ public class AdoParameterSerializer : IAdoYamlSectionSerializer
             {
                 var genericInternalType = type.GetGenericArguments()[0];
                 if (type.GetGenericTypeDefinition() == typeof(AdoObjectParameter<>))
-                    CallGenericMethod(methodName: nameof(AppendObjectParameter), genericType: type, parameters: [p, startingIndent + 2]);
+                    CallGenericMethod(methodName: nameof(AppendObjectParameter), genericType: type, parameters: [p, 2]);
                 else if (type.GetGenericTypeDefinition() == typeof(AdoArrayParameter<>))
-                    CallGenericMethod(methodName: nameof(AppendArrayParameter), genericType: type, parameters: [p, startingIndent + 2]);
+                    CallGenericMethod(methodName: nameof(AppendArrayParameter), genericType: type, parameters: [p, 2]);
                 else if (type.GetGenericTypeDefinition() == typeof(AdoDictionaryParameter<>))
                 {
                     if (genericInternalType != typeof(AdoObject<>))
-                        CallGenericMethod(methodName: nameof(AppendDictionaryParameter), genericType: type, parameters: [p, startingIndent + 2]);
+                        CallGenericMethod(methodName: nameof(AppendDictionaryParameter), genericType: type, parameters: [p, 2]);
                     else
-                        CallGenericMethod(methodName: nameof(AppendObjectDictionaryParameter), genericType: type, parameters: [p, startingIndent + 2]);
+                        CallGenericMethod(methodName: nameof(AppendObjectDictionaryParameter), genericType: type, parameters: [p, 2]);
                 }
             }
             else
                 switch (p)
                 {
                     case AdoStringParameter parameter:
-                        AppendStringParameter(parameter, startingIndent + 2);
+                        AppendStringParameter(parameter, 2);
                         break;
                     case AdoBoolParameter parameter:
-                        AppendBoolParameter(parameter, startingIndent + 2);
+                        AppendBoolParameter(parameter, 2);
                         break;
                     default:
                         throw new ArgumentException(nameof(p));

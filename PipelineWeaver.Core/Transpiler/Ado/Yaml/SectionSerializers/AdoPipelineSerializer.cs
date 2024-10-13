@@ -15,13 +15,11 @@ public class AdoPipelineSerializer : IAdoYamlSectionSerializer
             _builder = builder;
 
         _builder.AppendLine(startingIndent, "name: " + pipeline.Name);
-        _builder.AppendEmptyLine();
         AppendPool(pipeline, startingIndent);
         AppendVariables(pipeline, startingIndent);
         AppendTriggers(pipeline, startingIndent);
         AppendResources(pipeline, startingIndent);
         AppendStages(pipeline, startingIndent);
-        _builder.AppendEmptyLine();
 
     }
 

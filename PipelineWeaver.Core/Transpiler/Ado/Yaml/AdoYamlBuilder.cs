@@ -22,7 +22,7 @@ public class AdoYamlBuilder
         section.AppendSection(this, startingIndent);
     }
 
-    public void AppendLine(int indention, string? line, bool removeEmptyLines = true)
+    public void AppendLine(int indention, string? line, bool removeEmptyLines = false, bool removeTrailingNewline = false)
     {
         if (string.IsNullOrWhiteSpace(line)) return;
 
@@ -30,7 +30,13 @@ public class AdoYamlBuilder
         if (removeEmptyLines)
             split = split.Where(s => s.Trim() != string.Empty).ToList();
         var indentionStr = new string(' ', indention);
-        split.ForEach(l => _sb.AppendLine($"{indentionStr}{l}"));
+        split.ForEach(l =>
+        {
+            if (l == split[split.Count - 1] && removeTrailingNewline)
+                _sb.Append($"{indentionStr}{l}");
+            else
+                _sb.AppendLine($"{indentionStr}{l}");
+        });
     }
 
     public void AppendEmptyLine()
@@ -136,9 +142,7 @@ public static class AdoSerializerHelpers
         var innerBuilder = new AdoYamlBuilder();
         serializer.AppendSection(section, innerBuilder, startingIndent);
         var serializedString = innerBuilder.ToString();
-        if (serializedString.EndsWith(Environment.NewLine))
-            serializedString = serializedString.Substring(0, serializedString.Length - Environment.NewLine.Length);
-        builder.AppendLine(startingIndent, serializedString);
+        builder.AppendLine(0, serializedString);
     }
 }
 

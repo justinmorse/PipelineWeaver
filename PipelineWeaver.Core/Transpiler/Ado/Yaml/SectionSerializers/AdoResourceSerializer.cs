@@ -16,18 +16,18 @@ namespace PipelineWeaver.Core.Transpiler.Ado.Yaml.SectionSerializers
         public void AppendSection(AdoSectionBase section, AdoYamlBuilder? builder, int startingIndent)
         {
             var resource = section as AdoSectionCollection<IAdoResource> ?? throw new ArgumentException(nameof(section));
-            if (builder is not null)
-                _builder = builder;
 
-            _builder.AppendLine(startingIndent, "resources:");
+            _builder.AppendLine(0, "resources:");
             if (resource.Count > 0)
             {
-                AppendPipelineResources(resource, startingIndent + 2);
-                AppendBuildResources(resource, startingIndent + 2);
-                AppendRepositoryResources(resource, startingIndent + 2);
-                AppendContainerResources(resource, startingIndent + 2);
-                AppendPackageResources(resource, startingIndent + 2);
+                AppendPipelineResources(resource, 2);
+                AppendBuildResources(resource, 2);
+                AppendRepositoryResources(resource, 2);
+                AppendContainerResources(resource, 2);
+                AppendPackageResources(resource, 2);
             }
+
+            builder.AppendLine(startingIndent, _builder.ToString(), true, true);
         }
 
         private void AppendPipelineResources(AdoSectionCollection<IAdoResource> resources, int startingIndent)

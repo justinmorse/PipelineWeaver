@@ -14,17 +14,16 @@ namespace PipelineWeaver.Core.Transpiler.Ado.Yaml.SectionSerializers
         public void AppendSection(AdoSectionBase section, AdoYamlBuilder? builder, int startingIndent)
         {
             var trigger = section as AdoTriggerContainer ?? throw new ArgumentException(nameof(section));
-            if (builder is not null)
-                _builder = builder;
 
-            _builder.AppendLine(startingIndent, "triggers:");
+            _builder.AppendLine(0, "triggers:");
             if (trigger.Count > 0)
             {
                 if (trigger.Batch)
-                    _builder.AppendLine(startingIndent + 2, "batch: true");
-                AppendBranchTriggers(trigger, startingIndent + 2);
-                AppendPathTriggers(trigger, startingIndent + 2);
-                AppendTagTriggers(trigger, startingIndent + 2);
+                    _builder.AppendLine(2, "batch: true");
+                AppendBranchTriggers(trigger, 2);
+                AppendPathTriggers(trigger, 2);
+                AppendTagTriggers(trigger, 2);
+                builder.AppendLine(startingIndent, _builder.ToString(), true, true);
             }
         }
 

@@ -14,29 +14,29 @@ namespace PipelineWeaver.Core.Transpiler.Ado.Yaml.SectionSerializers
         public void AppendSection(AdoSectionBase section, AdoYamlBuilder? builder, int startingIndent)
         {
             var pool = section as AdoSectionCollection<IAdoPool> ?? throw new ArgumentException(nameof(section));
-            if (builder is not null)
-                _builder = builder;
 
-            AppendPools(pool, startingIndent);
+            AppendPools(pool);
+
+            builder?.AppendLine(startingIndent, _builder.ToString(), true, true);
         }
 
-        private void AppendPools(AdoSectionCollection<IAdoPool> pool, int startingIndent)
+        private void AppendPools(AdoSectionCollection<IAdoPool> pool)
         {
             if (pool.Count > 0)
             {
-                _builder.AppendLine(startingIndent, "pools:");
+                _builder.AppendLine(0, "pools:");
                 pool.ToList().ForEach(p =>
                 {
                     switch (p)
                     {
                         case AdoHostedPool hostedPool:
                             {
-                                AppendHostedPool(hostedPool, startingIndent);
+                                AppendHostedPool(hostedPool);
                                 break;
                             }
                         case AdoNamedPool pool:
                             {
-                                AppendPool(pool, startingIndent);
+                                AppendPool(pool);
                                 break;
                             }
                         default:
@@ -46,15 +46,15 @@ namespace PipelineWeaver.Core.Transpiler.Ado.Yaml.SectionSerializers
             }
         }
 
-        internal void AppendHostedPool(AdoHostedPool pool, int startingIndent)
+        internal void AppendHostedPool(AdoHostedPool pool)
         {
-            _builder.AppendLine(startingIndent + 2, $"vmImage: {pool.VmImage}");
+            _builder.AppendLine(2, $"vmImage: {pool.VmImage}");
         }
 
-        internal void AppendPool(AdoNamedPool pool, int startingIndent)
+        internal void AppendPool(AdoNamedPool pool)
         {
-            _builder.AppendLine(startingIndent + 2, $"name: {pool.Name}");
-            _builder.AppendArray("demands", startingIndent + 2, pool.Demands?.ToArray());
+            _builder.AppendLine(2, $"name: {pool.Name}");
+            _builder.AppendArray("demands", 2, pool.Demands?.ToArray());
         }
     }
 }

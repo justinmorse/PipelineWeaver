@@ -10,7 +10,7 @@ public static class SectionSerializerFactory
         switch (section)
         {
             case AdoPipeline _: return new AdoPipelineSerializer();
-            case AdoSectionCollection<IAdoVariable> _: return new AdoVariableSectionSerializer();
+            case AdoSectionCollection<IAdoVariable> _: return new AdoVariableSerializer();
             case AdoTriggerContainer _: return new AdoTriggerSerializer();
             case AdoSectionCollection<IAdoResource> _: return new AdoResourceSerializer();
             case AdoSectionCollection<AdoStageBase> _: return new AdoStageSerializer();

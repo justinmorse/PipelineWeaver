@@ -5,56 +5,56 @@ using PipelineWeaver.Core.Transpiler.Ado.Yaml.SectionSerializers.Interfaces;
 
 namespace PipelineWeaver.Core.Transpiler.Ado.Yaml.SectionSerializers;
 
-public class AdoVariableSectionSerializer : IAdoYamlSectionSerializer
+public class AdoVariableSerializer : IAdoYamlSectionSerializer
 {
     internal AdoYamlBuilder _builder = new AdoYamlBuilder();
 
     public void AppendSection(AdoSectionBase section, AdoYamlBuilder? builder, int startingIndent)
     {
         var variables = section as AdoSectionCollection<IAdoVariable> ?? throw new ArgumentException(nameof(section));
-        if (builder is not null)
-            _builder = builder;
 
-        _builder.AppendLine(startingIndent, "variables:");
+        _builder.AppendLine(0, "variables:");
         variables.ToList().ForEach(v =>
         {
             switch (v)
             {
                 case AdoNameVariable variable:
                     {
-                        BuildSection(variable, startingIndent);
+                        BuildSection(variable);
                         break;
                     }
                 case AdoGroupVariable variable:
                     {
-                        BuildSection(variable, startingIndent);
+                        BuildSection(variable);
                         break;
                     }
                 case AdoTemplateVariable variable:
                     {
-                        BuildSection(variable, startingIndent);
+                        BuildSection(variable);
                         break;
                     }
                 default:
                     throw new ArgumentException(nameof(section));
             }
         });
+
+        builder?.AppendLine(startingIndent, _builder.ToString(), true, true);
     }
 
 
-    internal void BuildSection(AdoNameVariable section, int startingIndent)
+    internal void BuildSection(AdoNameVariable section)
     {
-        _builder.AppendLine(startingIndent, "- name: " + section.Name);
-        _builder.AppendLine(startingIndent + 2, "value: " + section.Value);
+        _builder.AppendLine(0, "- name: " + section.Name);
+        _builder.AppendLine(0 + 2, "value: " + section.Value);
     }
 
-    internal void BuildSection(AdoGroupVariable section, int startingIndent)
+    internal void BuildSection(AdoGroupVariable section)
     {
-        _builder.AppendLine(startingIndent, "- group: " + section.Group);
+        _builder.AppendLine(0, "- group: " + section.Group);
     }
 
-    internal void BuildSection(AdoTemplateVariable section, int startingIndent)
+    internal void BuildSection(AdoTemplateVariable section)
     {
-        _builder.AppendLine(startingIndent, "- template: " + section.Template);
+        _builder.AppendLine(0, "- template: " + section.Template);
     }
 }
