@@ -30,13 +30,13 @@ public class AdoYamlBuilder
         if (removeEmptyLines)
             split = split.Where(s => s.Trim() != string.Empty).ToList();
         var indentionStr = new string(' ', indention);
-        split.ForEach(l =>
+        for (int i = 0; i < split.Count; i++)
         {
-            if (l == split[split.Count - 1] && removeTrailingNewline)
-                _sb.Append($"{indentionStr}{l}");
+            if (i == split.Count - 1 && removeTrailingNewline)
+                _sb.Append($"{indentionStr}{split[i]}");
             else
-                _sb.AppendLine($"{indentionStr}{l}");
-        });
+                _sb.AppendLine($"{indentionStr}{split[i]}");
+        }
     }
 
     public void AppendEmptyLine()

@@ -1,0 +1,145 @@
+name: test
+pool: Pool
+
+variables:
+- name: nameName
+  value: namevalue
+- group: groupvalue
+- template: templatevalue
+
+triggers:
+  batch: true
+  branches:
+    include:
+    - BranchIncludeTrigger
+    exclude:
+    - BranchExcludeTrigger
+  paths:
+    include:
+    - PathIncludeTrigger
+    exclude:
+    - PathExcludeTrigger
+  tags:
+    include:
+    - TagIncludeTrigger
+    exclude:
+    - TagExcludeTrigger
+
+resources:
+  pipelines:
+  - pipeline: Pipeline
+    connection: Connection
+    project: Project
+    source: Source
+    version: Version
+    branch: Branch
+    tags: Tag1 Tag2
+  builds:
+  - build: Build
+    connection: Connection
+    source: Source
+    trigger: True
+  repositories:
+  - repository: Repository
+    project: Project
+    type: Type
+    connection: Connection
+    source: Source
+  containers:
+  - container: Container
+    connection: Connection
+    image: Image
+    options: Options
+    env: Env
+    ports: Ports
+    volumes: Volumes
+  packages:
+  - package: Package
+    type: Type
+    connection: Connection
+    version: Version
+    tag: Tag
+
+stages:
+- stage: Stage
+  dependsOn:
+  - Depend1
+  - Depend2
+  displayName: DisplayName
+  variables:
+  - name: Name
+    value: Value
+  lockBehavior: LockBehavior
+  trigger: Trigger
+  isSkippable: True
+  templateContext: TemplateContext
+  pools:
+    vmImage: HostedPoolName
+    name: PoolName
+  jobs:
+  - job: Job
+    displayName: DisplayName
+    dependsOn:
+    - Depend1
+    - Depend2
+    steps:
+    - script: Script
+    - template: StepTemplate
+      parameters:
+        boolParamName: True
+  - template: JobTemplate
+    parameters:
+      boolParamName: True
+      stringParamName: Value
+      arrayStrParamName:
+      - one
+      - two
+      arrayBoolParamName:
+      - True
+      - True
+      arrayIntParamName:
+      - 100
+      - 101
+      dictStrParamName:
+        key1: value1
+        key2: value2
+      dictBoolParamName:
+        key1: True
+        key2: True
+      dictObjParamName:
+        key1:
+          Field1: Value1
+          Field2: Value2
+          Field3:
+            Field3_1: Value3_1
+            Field3_2: True
+            Field3_3:
+              Field3_3_1: Value3_3_1
+              Field3_3_2: True
+        key2:
+          Field1: Value1
+          Field2: Value2
+          Field3:
+            Field3_1: Value3_1
+            Field3_2: True
+            Field3_3:
+              Field3_3_1: Value3_3_1
+              Field3_3_2: True
+      adoTestObjectParamName:
+        Field1: Value1
+        Field2: Value2
+        Field3: False
+      adoDynObjParamName:
+        Field1: Value1
+        Field2: Value2
+        Field3:
+          Field3_1: Value3_1
+          Field3_2: True
+          Field3_3:
+            Field3_3_1: Value3_3_1
+            Field3_3_2: True
+- template: StageTemplate
+  parameters:
+    stringParamName: Value
+
+

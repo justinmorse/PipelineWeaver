@@ -64,7 +64,8 @@ namespace PipelineWeaver.Core.Transpiler.Ado.Yaml.SectionSerializers
         {
             _builder.AppendLine(0, "- deployment: " + job.Deployment);
             AppendBaseFields(job);
-            _builder.Append(4, job.Strategy);
+            if (job.Strategy is not null)
+                _builder.Append(4, new AdoSectionCollection<AdoDeploymentStrategyBase>() { job.Strategy });
         }
 
         private void AppendBasicJob(AdoJob job)

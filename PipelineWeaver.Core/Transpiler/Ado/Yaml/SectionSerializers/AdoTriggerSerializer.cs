@@ -61,9 +61,15 @@ namespace PipelineWeaver.Core.Transpiler.Ado.Yaml.SectionSerializers
 
             _builder.AppendLine(startingIndent, "branches:");
             if (branchTriggers.Any(t => t.TriggerType == AdoTriggerType.BranchInclude))
+            {
                 _builder.AppendArray("include", 2 + startingIndent, branchTriggers.Where(t => t.TriggerType == AdoTriggerType.BranchInclude).Select(t => t.Value).ToArray());
+                _builder.AppendEmptyLine();
+            }
             if (branchTriggers.Any(t => t.TriggerType == AdoTriggerType.BranchExclude))
+            {
                 _builder.AppendArray("exclude", 2 + startingIndent, branchTriggers.Where(t => t.TriggerType == AdoTriggerType.BranchExclude).Select(t => t.Value).ToArray());
+                _builder.AppendEmptyLine();
+            }
         }
     }
 }

@@ -25,6 +25,7 @@ namespace PipelineWeaver.Core.Transpiler.Ado.Yaml.SectionSerializers
                 AppendRepositoryResources(resource, 2);
                 AppendContainerResources(resource, 2);
                 AppendPackageResources(resource, 2);
+                AppendWebhookResources(resource, 2);
             }
 
             builder.AppendLine(startingIndent, _builder.ToString(), true, true);
@@ -150,12 +151,43 @@ namespace PipelineWeaver.Core.Transpiler.Ado.Yaml.SectionSerializers
                     if (!string.IsNullOrWhiteSpace(packageResource.Connection))
                         _builder.AppendLine(startingIndent + 2, $"connection: {packageResource.Connection}");
                     if (!string.IsNullOrWhiteSpace(packageResource.Version))
-                        _builder.AppendLine(startingIndent + 2, $"verion: {packageResource.Version}");
+                        _builder.AppendLine(startingIndent + 2, $"version: {packageResource.Version}");
                     if (string.IsNullOrWhiteSpace(packageResource.Endpoint))
                         _builder.AppendLine(startingIndent + 2, $"tag: {packageResource.Tag}");
                 }
             });
         }
 
+        private void AppendWebhookResources(AdoSectionCollection<IAdoResource> resources, int startingIndent)
+        {
+            var packageResources = resources?.Where(r => r is AdoWebhookResource).ToList() ?? new List<IAdoResource>();
+            if (packageResources.Count == 0)
+                return;
+
+            _builder.AppendLine(startingIndent, "webhooks:");
+            packageResources.ForEach(r =>
+            {
+                var webhookResource = r as AdoWebhookResource;
+                if (webhookResource != null)
+                {
+
+                    _builder.AppendLine(startingIndent, $"- webhook: {webhookResource.Webhook.Webhook}");
+                    if (!string.IsNullOrWhiteSpace(webhookResource.Webhook.Connection))
+                        _builder.AppendLine(startingIndent + 2, $"connection: {webhookResource.Webhook.Connection}");
+                    if (!string.IsNullOrWhiteSpace(webhookResource.Webhook.Type))
+                        _builder.AppendLine(startingIndent + 2, $"type: {webhookResource.Webhook.Type}");
+                    if (webhookResource.Webhook.Filters is not null)
+                    {
+                        _builder.AppendLine(startingIndent + 2, $"filters:");
+                        webhookResource.Webhook.Filters.ForEach(f =>
+                        {
+                            _builder.AppendLine(startingIndent + 2, $"- path: {f.Path}");
+                            _builder.AppendLine(startingIndent + 4, $"value: {f.Value}");
+                        });
+                    }
+                }
+
+            });
+        }
     }
 }

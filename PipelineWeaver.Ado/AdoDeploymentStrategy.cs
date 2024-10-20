@@ -9,7 +9,7 @@ public abstract class AdoDeploymentStrategyBase : AdoSectionBase
     public AdoDeploymentStrategyItem? Deploy { get; set; }
     public AdoDeploymentStrategyItem? RouteTraffic { get; set; }
     public AdoDeploymentStrategyItem? PostRouteTraffic { get; set; }
-    public AdoDeplymentStrategyOn? On { get; set; }
+    public AdoDeploymentStrategyOn? On { get; set; }
 }
 
 public class AdoRunOnceDeploymentStrategy : AdoDeploymentStrategyBase
@@ -34,7 +34,7 @@ public class AdoDeploymentStrategyItem
 }
 
 
-public class AdoDeplymentStrategyOn
+public class AdoDeploymentStrategyOn
 {
     public AdoDeploymentStrategyItem? Failure { get; set; }
     public AdoDeploymentStrategyItem? Success { get; set; }

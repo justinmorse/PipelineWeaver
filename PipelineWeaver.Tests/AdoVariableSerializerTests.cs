@@ -3,19 +3,11 @@ using System.Text;
 using PipelineWeaver.Ado;
 using PipelineWeaver.Core.Transpiler.Ado.Yaml;
 using PipelineWeaver.Core.Transpiler.Yaml;
-using static PipelineWeaver.Tests.Ado.Helpers;
 
 namespace PipelineWeaver.Tests.Ado;
 
 public class AdoVariableSerializerTests
 {
-    [SetUp]
-    public void Setup()
-    {
-        if (File.Exists(PATH))
-            File.Delete(PATH);
-    }
-
     [Test]
     public void TestVariableSerialization_name()
     {

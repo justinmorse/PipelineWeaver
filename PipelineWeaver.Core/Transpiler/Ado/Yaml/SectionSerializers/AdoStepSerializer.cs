@@ -143,14 +143,16 @@ namespace PipelineWeaver.Core.Transpiler.Ado.Yaml.SectionSerializers
         private void AppendPublishStep(AdoPublishStep step)
         {
             _builder.AppendLine(0, "- publish: " + step.Publish);
-            _builder.AppendLine(2, "artifact: " + step.Artifact);
+            if (!string.IsNullOrWhiteSpace(step.Artifact))
+                _builder.AppendLine(2, "artifact: " + step.Artifact);
             AppendBaseFields(step);
         }
 
         private void AppendDownloadStep(AdoDownloadStep step)
         {
             _builder.AppendLine(0, "- download: " + step.Download);
-            _builder.AppendLine(2, "artifact: " + step.Artifact);
+            if (!string.IsNullOrWhiteSpace(step.Artifact))
+                _builder.AppendLine(2, "artifact: " + step.Artifact);
             if (!string.IsNullOrWhiteSpace(step.Patterns))
                 _builder.AppendLine(2, "patterns: " + step.Patterns);
             AppendBaseFields(step);
@@ -196,7 +198,8 @@ namespace PipelineWeaver.Core.Transpiler.Ado.Yaml.SectionSerializers
         private void AppendDownloadBuildStep(AdoDownloadBuildStep step)
         {
             _builder.AppendLine(0, "- downloadBuild: " + step.DownloadBuild);
-            _builder.AppendLine(2, "artifact: " + step.Artifact);
+            if (!string.IsNullOrWhiteSpace(step.Artifact))
+                _builder.AppendLine(2, "artifact: " + step.Artifact);
             if (!string.IsNullOrWhiteSpace(step.Path))
                 _builder.AppendLine(2, "path: " + step.Path);
             if (!string.IsNullOrWhiteSpace(step.Patterns))

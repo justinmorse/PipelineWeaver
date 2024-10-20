@@ -25,7 +25,7 @@ public class AdoStage : AdoStageBase
 public class AdoStageTemplate : AdoStageBase
 {
     public required string Template { get; set; }
-    public List<string>? Parameters { get; set; }
+    public AdoSectionCollection<AdoParameterBase>? Parameters { get; set; }
 }
 
 

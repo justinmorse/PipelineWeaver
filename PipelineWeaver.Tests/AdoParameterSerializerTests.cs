@@ -3,7 +3,6 @@ using System.Text;
 using PipelineWeaver.Ado;
 using PipelineWeaver.Core.Transpiler.Ado.Yaml;
 using PipelineWeaver.Core.Transpiler.Yaml;
-using static PipelineWeaver.Tests.Ado.Helpers;
 
 namespace PipelineWeaver.Tests.Ado;
 
@@ -15,6 +14,7 @@ public class AdoParameterSerializerTests
         var sb = new StringBuilder();
         sb.AppendLine("parameters:");
         sb.AppendLine("  boolParamName: True");
+        sb.AppendLine();
         var expected = sb.ToString();
 
         var adoJobParameters = new AdoSectionCollection<AdoParameterBase>()
@@ -25,6 +25,7 @@ public class AdoParameterSerializerTests
         var doc = new AdoYamlDocument();
         doc.Builder = new AdoYamlBuilder();
         adoJobParameters.AppendSection(doc.Builder, 0);
+
         Assert.That(doc.Builder.ToString(), Is.EqualTo(expected));
 
     }
@@ -36,6 +37,7 @@ public class AdoParameterSerializerTests
         var sb = new StringBuilder();
         sb.AppendLine("parameters:");
         sb.AppendLine("  stringParamName: Value");
+        sb.AppendLine();
         var expected = sb.ToString();
 
         var adoJobParameters = new AdoSectionCollection<AdoParameterBase>()
@@ -59,6 +61,7 @@ public class AdoParameterSerializerTests
         sb.AppendLine("  arrayStrParamName:");
         sb.AppendLine("  - one");
         sb.AppendLine("  - two");
+        sb.AppendLine();
         var expected = sb.ToString();
 
         var adoJobParameters = new AdoSectionCollection<AdoParameterBase>()
@@ -81,6 +84,7 @@ public class AdoParameterSerializerTests
         sb.AppendLine("  arrayBoolParamName:");
         sb.AppendLine("  - True");
         sb.AppendLine("  - True");
+        sb.AppendLine();
         var expected = sb.ToString();
 
         var adoJobParameters = new AdoSectionCollection<AdoParameterBase>()
@@ -104,6 +108,7 @@ public class AdoParameterSerializerTests
         sb.AppendLine("  arrayIntParamName:");
         sb.AppendLine("  - 100");
         sb.AppendLine("  - 101");
+        sb.AppendLine();
         var expected = sb.ToString();
 
         var adoJobParameters = new AdoSectionCollection<AdoParameterBase>()
@@ -126,6 +131,7 @@ public class AdoParameterSerializerTests
         sb.AppendLine("  dictStrParamName:");
         sb.AppendLine("    key1: value1");
         sb.AppendLine("    key2: value2");
+        sb.AppendLine();
         var expected = sb.ToString();
 
         var adoJobParameters = new AdoSectionCollection<AdoParameterBase>()
@@ -147,6 +153,7 @@ public class AdoParameterSerializerTests
         sb.AppendLine("  dictBoolParamName:");
         sb.AppendLine("    key1: True");
         sb.AppendLine("    key2: True");
+        sb.AppendLine();
         var expected = sb.ToString();
 
         var adoJobParameters = new AdoSectionCollection<AdoParameterBase>()
@@ -169,11 +176,12 @@ public class AdoParameterSerializerTests
         sb.AppendLine("    Field1: Value1");
         sb.AppendLine("    Field2: Value2");
         sb.AppendLine("    Field3: False");
+        sb.AppendLine();
         var expected = sb.ToString();
 
         var adoJobParameters = new AdoSectionCollection<AdoParameterBase>()
         {
-            new AdoObjectParameter<AdoTestObject>(new AdoTestObject()){Name = "adoTestObjectParamName"},
+            new AdoObjectParameter<Helpers.AdoTestObject>(new Helpers.AdoTestObject()){Name = "adoTestObjectParamName"},
         };
 
         var doc = new AdoYamlDocument();
@@ -206,6 +214,7 @@ public class AdoParameterSerializerTests
         sb.AppendLine("        Field3_3:");
         sb.AppendLine("          Field3_3_1: Value3_3_1");
         sb.AppendLine("          Field3_3_2: True");
+        sb.AppendLine();
         var expected = sb.ToString();
 
         var dynamicObj = new
@@ -249,6 +258,7 @@ public class AdoParameterSerializerTests
         sb.AppendLine("      Field3_3:");
         sb.AppendLine("        Field3_3_1: Value3_3_1");
         sb.AppendLine("        Field3_3_2: True");
+        sb.AppendLine();
         var expected = sb.ToString();
 
         var dynamicObj = new
@@ -309,7 +319,7 @@ public class AdoParameterSerializerTests
             new AdoDictionaryParameter<string>(){Name = "dictStrParamName", Value = new Dictionary<string, string>(){{"key1","value1"},{"key2","value2"}}},
             new AdoDictionaryParameter<bool>(){Name = "dictBoolParamName", Value = new Dictionary<string, bool>(){{"key1",true},{"key2",true}} },
             new AdoDictionaryParameter<object>(){Name = "dictObjParamName", Value = new Dictionary<string, object>(){{"key1",dynamicObj},{"key2",dynamicObj}}},
-            new AdoObjectParameter<AdoTestObject>(new AdoTestObject()){Name = "adoTestObjectParamName"},
+            new AdoObjectParameter<Helpers.AdoTestObject>(new Helpers.AdoTestObject()){Name = "adoTestObjectParamName"},
             new AdoObjectParameter<dynamic>(dynamicObj){Name = "adoDynObjParamName"}
         };
 
@@ -372,6 +382,7 @@ public class AdoParameterSerializerTests
         sb.AppendLine("      Field3_3:");
         sb.AppendLine("        Field3_3_1: Value3_3_1");
         sb.AppendLine("        Field3_3_2: True");
+        sb.AppendLine();
         return sb.ToString();
     }
 }

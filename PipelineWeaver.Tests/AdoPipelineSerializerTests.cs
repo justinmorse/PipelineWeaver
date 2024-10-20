@@ -1,24 +1,16 @@
 using System;
 using PipelineWeaver.Ado;
 using PipelineWeaver.Core.Transpiler.Yaml;
-using static PipelineWeaver.Tests.Ado.Helpers;
 
 namespace PipelineWeaver.Tests.Ado;
 
 public class AdoPipelineSerializerTests
 {
-    [SetUp]
-    public void Setup()
-    {
-        if (File.Exists(PATH))
-            File.Delete(PATH);
-    }
-
     [Test]
-    [Explicit()]
-    public void TestPipelineBuild()
+    public void TestPipeline_basic()
     {
 
+        var expected = File.ReadAllText("basic-pipeline.yaml");
         var variables = new AdoSectionCollection<IAdoVariable>()
         {
             new AdoNameVariable{Name = "nameName",Value = "namevalue"},
@@ -35,6 +27,7 @@ public class AdoPipelineSerializerTests
             new AdoTrigger(){TriggerType = AdoTriggerType.TagInclude,Value = "TagIncludeTrigger"},
             new AdoTrigger(){TriggerType = AdoTriggerType.TagExclude,Value = "TagExcludeTrigger"},
         };
+        triggers.Batch = true;
 
         var resources = new AdoSectionCollection<IAdoResource>()
         {
@@ -77,7 +70,7 @@ public class AdoPipelineSerializerTests
             new AdoDictionaryParameter<string>(){Name = "dictStrParamName", Value = new Dictionary<string, string>(){{"key1","value1"},{"key2","value2"}}},
             new AdoDictionaryParameter<bool>(){Name = "dictBoolParamName", Value = new Dictionary<string, bool>(){{"key1",true},{"key2",true}} },
             new AdoDictionaryParameter<object>(){Name = "dictObjParamName", Value = new Dictionary<string, object>(){{"key1",dynamicObj},{"key2",dynamicObj}}},
-            new AdoObjectParameter<AdoTestObject>(new AdoTestObject()){Name = "adoTestObjectParamName"},
+            new AdoObjectParameter<Helpers.AdoTestObject>(new Helpers.AdoTestObject()){Name = "adoTestObjectParamName"},
             new AdoObjectParameter<dynamic>(dynamicObj){Name = "adoDynObjParamName"}
         };
 
@@ -91,10 +84,14 @@ public class AdoPipelineSerializerTests
             new AdoTemplateJob(){Template = "JobTemplate", Condition = "JobTemplateCondition", Parameters = adoJobParameters },
         };
 
+        var parameters = new AdoSectionCollection<AdoParameterBase>()
+        {
+            new AdoStringParameter(){Name = "stringParamName", Value = "Value"}
+        };
         var stages = new AdoSectionCollection<AdoStageBase>()
         {
             new AdoStage(){Stage = "Stage", Condition = "Condition", DependsOn = new List<string>(){"Depend1","Depend2"}, DisplayName = "DisplayName", IsSkippable = true, Jobs =  jobs, LockBehavior = "LockBehavior", TemplateContext = "TemplateContext", Trigger = "Trigger", Variables = new AdoSectionCollection<IAdoVariable>() { new AdoNameVariable() { Name = "Name", Value = "Value" } }, Pools = pools },
-            new AdoStageTemplate(){Template = "StageTemplate", Condition = "StageTemplateCondition", Parameters = new List<string>(){"Param1","Param2"}}
+            new AdoStageTemplate(){Template = "StageTemplate", Condition = "StageTemplateCondition", Parameters = parameters}
         };
 
         var a = new AdoPipeline()
@@ -109,8 +106,6 @@ public class AdoPipelineSerializerTests
 
         var doc = new AdoYamlDocument();
         doc.BuildPipeline(a);
-        doc.Save(PATH);
-        Assert.IsTrue(true);
-
+        Assert.That(doc.Builder.ToString(), Is.EqualTo(expected));
     }
 }

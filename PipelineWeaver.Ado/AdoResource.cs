@@ -63,3 +63,9 @@ public class AdoContainerResource : IAdoResource
     public string? Volumes { get; set; }
     public string? Options { get; set; }
 }
+
+public class AdoWebhookResource : IAdoResource
+{
+    public required AdoWebhook Webhook { get; set; }
+
+}

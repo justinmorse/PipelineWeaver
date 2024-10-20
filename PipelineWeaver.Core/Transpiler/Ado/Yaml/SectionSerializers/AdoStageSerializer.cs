@@ -54,7 +54,7 @@ namespace PipelineWeaver.Core.Transpiler.Ado.Yaml.SectionSerializers
             _builder.AppendLine(0, "- template: " + stage.Template);
             if (stage.Parameters?.Count > 0)
             {
-                _builder.AppendArray("parameters", 2, stage.Parameters.ToArray());
+                _builder.Append(2, stage.Parameters);
             }
             AppendBaseFields(stage);
         }

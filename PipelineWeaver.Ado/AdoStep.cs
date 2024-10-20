@@ -42,6 +42,7 @@ public class AdoDownloadStep : AdoStepBase
 {
     public required string Download { get; set; }
     public string? Artifact { get; set; }
+    public string? Path { get; set; }
     public string? Patterns { get; set; }
 }
 
