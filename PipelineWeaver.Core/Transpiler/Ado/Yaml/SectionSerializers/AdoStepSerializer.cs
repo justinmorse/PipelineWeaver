@@ -12,14 +12,14 @@ namespace PipelineWeaver.Core.Transpiler.Ado.Yaml.SectionSerializers
     {
         internal AdoYamlBuilder _builder = new AdoYamlBuilder();
 
-        public void AppendSection(AdoSectionBase section, AdoYamlBuilder? builder, int startingIndent)
+        public void AppendSection(AdoSectionBase section, AdoYamlBuilder builder, int startingIndent)
         {
             var stepSection = section as AdoSectionCollection<AdoStepBase> ?? throw new ArgumentException(nameof(section));
 
             _builder.AppendLine(0, "steps:");
             AppendSteps(stepSection);
 
-            builder?.AppendLine(startingIndent, _builder.ToString(), true, true);
+            builder.AppendLine(startingIndent, _builder.ToString(), true, true);
         }
 
 

@@ -12,7 +12,7 @@ public class AdoParameterSerializer : IAdoYamlSectionSerializer
 {
     internal AdoYamlBuilder _builder = new AdoYamlBuilder();
 
-    public void AppendSection(AdoSectionBase section, AdoYamlBuilder? builder, int startingIndent)
+    public void AppendSection(AdoSectionBase section, AdoYamlBuilder builder, int startingIndent)
     {
         switch (section)
         {
@@ -25,7 +25,7 @@ public class AdoParameterSerializer : IAdoYamlSectionSerializer
             default:
                 throw new ArgumentException(nameof(section));
         }
-        builder?.AppendLine(startingIndent, _builder.ToString(), true);
+        builder.AppendLine(startingIndent, _builder.ToString(), true);
     }
 
     internal void AppendParameters(AdoSectionCollection<AdoParameterBase> parameters)

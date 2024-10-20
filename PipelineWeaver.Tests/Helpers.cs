@@ -2,7 +2,7 @@ using System;
 
 namespace PipelineWeaver.Tests.Ado;
 
-public class Helpers
+public static class Helpers
 {
 
     public static string PATH = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Desktop", "testPipeline.yaml");

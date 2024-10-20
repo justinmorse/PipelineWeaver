@@ -601,7 +601,7 @@ public class AdoStepSerializerTests
 
 
     //Helpers
-    void AppendBaseFields(AdoStepBase step)
+    static void AppendBaseFields(AdoStepBase step)
     {
         step.Name = "namevalue";
         step.TimeoutInMinutes = 1;

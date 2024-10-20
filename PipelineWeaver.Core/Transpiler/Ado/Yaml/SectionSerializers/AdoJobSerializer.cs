@@ -12,7 +12,7 @@ namespace PipelineWeaver.Core.Transpiler.Ado.Yaml.SectionSerializers
     {
         internal AdoYamlBuilder _builder = new AdoYamlBuilder();
 
-        public void AppendSection(AdoSectionBase section, AdoYamlBuilder? builder, int startingIndent)
+        public void AppendSection(AdoSectionBase section, AdoYamlBuilder builder, int startingIndent)
         {
             var jobs = section as AdoSectionCollection<AdoJobBase> ?? throw new ArgumentException(nameof(section));
 

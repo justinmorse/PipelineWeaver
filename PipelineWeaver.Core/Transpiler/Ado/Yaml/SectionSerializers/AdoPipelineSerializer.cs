@@ -8,19 +8,16 @@ namespace PipelineWeaver.Core.Transpiler.Ado.Yaml.SectionSerializers;
 public class AdoPipelineSerializer : IAdoYamlSectionSerializer
 {
     internal AdoYamlBuilder _builder = new AdoYamlBuilder();
-    public void AppendSection(AdoSectionBase section, AdoYamlBuilder? builder, int startingIndent)
+    public void AppendSection(AdoSectionBase section, AdoYamlBuilder builder, int startingIndent)
     {
         var pipeline = section as AdoPipeline ?? throw new ArgumentException(nameof(section));
-        if (builder is not null)
-            _builder = builder;
-
+        _builder = builder;
         _builder.AppendLine(startingIndent, "name: " + pipeline.Name);
         AppendPool(pipeline, startingIndent);
         AppendVariables(pipeline, startingIndent);
         AppendTriggers(pipeline, startingIndent);
         AppendResources(pipeline, startingIndent);
         AppendStages(pipeline, startingIndent);
-
     }
 
     private void AppendPool(AdoPipeline pipeline, int startingIndent)

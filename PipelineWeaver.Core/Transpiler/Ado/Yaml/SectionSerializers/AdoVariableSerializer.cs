@@ -9,7 +9,7 @@ public class AdoVariableSerializer : IAdoYamlSectionSerializer
 {
     internal AdoYamlBuilder _builder = new AdoYamlBuilder();
 
-    public void AppendSection(AdoSectionBase section, AdoYamlBuilder? builder, int startingIndent)
+    public void AppendSection(AdoSectionBase section, AdoYamlBuilder builder, int startingIndent)
     {
         var variables = section as AdoSectionCollection<IAdoVariable> ?? throw new ArgumentException(nameof(section));
 
@@ -38,7 +38,7 @@ public class AdoVariableSerializer : IAdoYamlSectionSerializer
             }
         });
 
-        builder?.AppendLine(startingIndent, _builder.ToString(), true, true);
+        builder.AppendLine(startingIndent, _builder.ToString(), true, true);
     }
 
 

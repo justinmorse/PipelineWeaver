@@ -76,22 +76,6 @@ public class AdoYamlBuilder
             items.Keys.ToList().ForEach(t => AppendLine(indention + 2, $"{t}: {items[t]}"));
     }
 
-    // public void AppendKeyValuePairs_Obj<T>(string? sectionName, int indention, Dictionary<string, AdoObject<T>>? items)
-    // {
-    //     if (items is null || !items.Any()) return;
-    //     var indentionStr = new string(' ', indention);
-    //     if (!string.IsNullOrWhiteSpace(sectionName))
-    //         _sb.AppendLine($"{indentionStr}{sectionName}:");
-
-    //     items.Keys.ToList().ForEach(t =>
-    //     {
-    //         var serializer = new AdoObjectSerializer();
-    //         var s = serializer.Serialize(items[t], indention + 2);
-    //         _sb.AppendLine($"{indentionStr}  {t}:");
-    //         _sb.AppendLine($"{indentionStr}    {s}");
-    //     });
-    // }
-
 
     internal void AppendObjectArray<T>(string sectionName, int indention, AdoObject<T>[] items)
     {

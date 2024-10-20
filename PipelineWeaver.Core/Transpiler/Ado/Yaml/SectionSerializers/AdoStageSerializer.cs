@@ -10,9 +10,9 @@ namespace PipelineWeaver.Core.Transpiler.Ado.Yaml.SectionSerializers
 {
     public class AdoStageSerializer : IAdoYamlSectionSerializer
     {
-        private AdoYamlBuilder _builder = new AdoYamlBuilder();
+        private readonly AdoYamlBuilder _builder = new AdoYamlBuilder();
 
-        public void AppendSection(AdoSectionBase section, AdoYamlBuilder? builder, int startingIndent)
+        public void AppendSection(AdoSectionBase section, AdoYamlBuilder builder, int startingIndent)
         {
             var stage = section as AdoSectionCollection<AdoStageBase> ?? throw new ArgumentException(nameof(section));
 
