@@ -87,7 +87,7 @@ public class AdoStageSerializerTests
 
         var parameters = new AdoSectionCollection<AdoParameterBase>()
         {
-            new AdoStringParameter(){Name = "stringParamName", Value = "Value"}
+            new AdoStringParameter(){Name = "stringParamName", ValueOrDefault = "Value", ParameterType = AdoParameterType.Standard},
         };
 
         var stages = new AdoSectionCollection<AdoStageBase>()

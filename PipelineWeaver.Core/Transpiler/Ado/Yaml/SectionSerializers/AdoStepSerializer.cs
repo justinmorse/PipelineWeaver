@@ -97,8 +97,10 @@ namespace PipelineWeaver.Core.Transpiler.Ado.Yaml.SectionSerializers
             _builder.AppendLine(0, "- task: " + step.Task);
             AppendBaseFields(step);
             if (step.Inputs?.Count > 0)
-                _builder.AppendKeyValuePairs("inputs", 2, step.Inputs);
-
+            {
+                _builder.AppendLine(2, "inputs:");
+                _builder.AppendKeyValuePairs(2, step.Inputs);
+            }
         }
 
         private void AppendPwshStep(AdoPwshStep step)
@@ -224,7 +226,10 @@ namespace PipelineWeaver.Core.Transpiler.Ado.Yaml.SectionSerializers
             if (!string.IsNullOrWhiteSpace(step.Target))
                 _builder.AppendLine(2, "target: " + step.Target);
             if (step.Env?.Count > 0)
-                _builder.AppendKeyValuePairs("env", 2, step.Env);
+            {
+                _builder.AppendLine(2, "env:");
+                _builder.AppendKeyValuePairs(2, step.Env);
+            }
             if (step.Enabled is not null)
                 _builder.AppendLine(2, "enabled: " + step.Enabled);
         }

@@ -114,7 +114,10 @@ namespace PipelineWeaver.Core.Transpiler.Ado.Yaml.SectionSerializers
                 if (!string.IsNullOrWhiteSpace(job.Container.Endpoint))
                     _builder.AppendLine(4, "endpoint: " + job.Container.Endpoint);
                 if (job.Container.Env is not null)
-                    _builder.AppendKeyValuePairs("env", 4, job.Container.Env);
+                {
+                    _builder.AppendLine(4, "env:");
+                    _builder.AppendKeyValuePairs(4, job.Container.Env);
+                }
                 if (job.Container.MapDockerSocket is not null)
                     _builder.AppendLine(4, "mapDockerSocket: " + job.Container.MapDockerSocket);
                 if (!string.IsNullOrWhiteSpace(job.Container.Options))
@@ -138,7 +141,8 @@ namespace PipelineWeaver.Core.Transpiler.Ado.Yaml.SectionSerializers
             }
             if (job.Services is not null)
             {
-                _builder.AppendKeyValuePairs("services", 0, job.Services);
+                _builder.AppendLine(0, "services:");
+                _builder.AppendKeyValuePairs(0, job.Services);
             }
             if (job.Workspace is not null)
             {

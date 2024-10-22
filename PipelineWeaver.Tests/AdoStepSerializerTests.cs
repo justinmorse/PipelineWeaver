@@ -22,7 +22,7 @@ public class AdoStepSerializerTests
 
         var steps = new AdoSectionCollection<AdoStepBase>()
         {
-            new AdoTemplateStep{Template = "templatevalue", Parameters = new AdoSectionCollection<AdoParameterBase>(){new AdoArrayParameter<string>(){Name = "arrayParamName", Value = new List<string>(){"Value1", "Value2"}.ToArray()}}}
+            new AdoTemplateStep{Template = "templatevalue", Parameters = new AdoSectionCollection<AdoParameterBase>(){new AdoArrayParameter<string>(){Name = "arrayParamName", ValueOrDefault = new List<string>(){"Value1", "Value2"}.ToArray(), ParameterType = AdoParameterType.Standard}}},
         };
 
         var doc = new AdoYamlDocument();

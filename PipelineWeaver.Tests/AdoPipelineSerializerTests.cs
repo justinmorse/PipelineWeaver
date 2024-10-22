@@ -62,21 +62,21 @@ public class AdoPipelineSerializerTests
 
         var adoJobParameters = new AdoSectionCollection<AdoParameterBase>()
         {
-            new AdoBoolParameter(){Name = "boolParamName", Value = true},
-            new AdoStringParameter(){Name = "stringParamName", Value = "Value"},
-            new AdoArrayParameter<string>(){Name = "arrayStrParamName", Value = new List<string>(){"one","two"}.ToArray()},
-            new AdoArrayParameter<bool>(){Name = "arrayBoolParamName", Value = new List<bool>() { true, true }.ToArray() },
-            new AdoArrayParameter<int>(){Name = "arrayIntParamName", Value = new List<int>() { 100, 101 }.ToArray() },
-            new AdoDictionaryParameter<string>(){Name = "dictStrParamName", Value = new Dictionary<string, string>(){{"key1","value1"},{"key2","value2"}}},
-            new AdoDictionaryParameter<bool>(){Name = "dictBoolParamName", Value = new Dictionary<string, bool>(){{"key1",true},{"key2",true}} },
-            new AdoDictionaryParameter<object>(){Name = "dictObjParamName", Value = new Dictionary<string, object>(){{"key1",dynamicObj},{"key2",dynamicObj}}},
-            new AdoObjectParameter<Helpers.AdoTestObject>(new Helpers.AdoTestObject()){Name = "adoTestObjectParamName"},
-            new AdoObjectParameter<dynamic>(dynamicObj){Name = "adoDynObjParamName"}
+            new AdoBoolParameter(){Name = "boolParamName", ValueOrDefault = true, ParameterType = AdoParameterType.Standard},
+            new AdoStringParameter(){Name = "stringParamName", ValueOrDefault = "Value", ParameterType = AdoParameterType.Standard},
+            new AdoArrayParameter<string>(){Name = "arrayStrParamName", ValueOrDefault = new List<string>(){"one","two"}.ToArray(), ParameterType   = AdoParameterType.Standard},
+            new AdoArrayParameter<bool>(){Name = "arrayBoolParamName", ValueOrDefault = new List<bool>() { true, true }.ToArray(), ParameterType = AdoParameterType.Standard},
+            new AdoArrayParameter<int>(){Name = "arrayIntParamName", ValueOrDefault = new List<int>() { 100, 101 }.ToArray(), ParameterType = AdoParameterType.Standard},
+            new AdoDictionaryParameter<string>(){Name = "dictStrParamName", ValueOrDefault = new Dictionary<string, string>(){{"key1","value1"},{"key2","value2"}}, ParameterType = AdoParameterType.Standard},
+            new AdoDictionaryParameter<bool>(){Name = "dictBoolParamName", ValueOrDefault = new Dictionary<string, bool>(){{"key1",true},{"key2",true}}, ParameterType  = AdoParameterType.Standard},
+            new AdoDictionaryParameter<object>(){Name = "dictObjParamName", ValueOrDefault = new Dictionary<string, object>(){{"key1",dynamicObj},{"key2",dynamicObj}}, ParameterType = AdoParameterType.Standard},
+            new AdoObjectParameter<Helpers.AdoTestObject>(){Name = "adoTestObjectParamName", ValueOrDefault = new Helpers.AdoTestObject(), ParameterType = AdoParameterType.Standard},
+            new AdoObjectParameter<dynamic>(){Name = "adoDynObjParamName", ValueOrDefault = dynamicObj, ParameterType = AdoParameterType.Standard},
         };
 
         var jobSteps = new AdoSectionCollection<AdoStepBase>(){
             new AdoScriptStep(){Script = "Script"},
-            new AdoTemplateStep(){Template = "StepTemplate", Parameters = new AdoSectionCollection<AdoParameterBase>(){new AdoBoolParameter(){Name = "boolParamName", Value = true}}},
+            new AdoTemplateStep(){Template = "StepTemplate", Parameters = new AdoSectionCollection<AdoParameterBase>(){new AdoBoolParameter(){Name = "boolParamName", ValueOrDefault = true, ParameterType = AdoParameterType.Standard}}},
         };
 
         var jobs = new AdoSectionCollection<AdoJobBase>(){
@@ -86,7 +86,7 @@ public class AdoPipelineSerializerTests
 
         var parameters = new AdoSectionCollection<AdoParameterBase>()
         {
-            new AdoStringParameter(){Name = "stringParamName", Value = "Value"}
+            new AdoStringParameter(){Name = "stringParamName", ValueOrDefault = "Value", ParameterType = AdoParameterType.Standard},
         };
         var stages = new AdoSectionCollection<AdoStageBase>()
         {

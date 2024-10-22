@@ -47,7 +47,7 @@ public class AdoJobSerializerTests
 
         var adoJobParameters = new AdoSectionCollection<AdoParameterBase>()
         {
-            new AdoStringParameter(){Name = "stringParamName", Value = "Value"},
+            new AdoStringParameter(){Name = "stringParamName", ValueOrDefault = "Value", ParameterType = AdoParameterType.Standard},
         };
 
         var jobs = new AdoSectionCollection<AdoJobBase>(){

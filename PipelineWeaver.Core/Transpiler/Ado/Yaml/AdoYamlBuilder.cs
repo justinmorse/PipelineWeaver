@@ -54,11 +54,10 @@ public class AdoYamlBuilder
         Array.ForEach(items, t => _sb.AppendLine($"{indentionStr}- {t}"));
     }
 
-    public void AppendKeyValuePairs<T>(string? sectionName, int indention, Dictionary<string, T>? items)
+    public void AppendKeyValuePairs<T>(int indention, Dictionary<string, T>? items)
     {
         if (items is null || !items.Any()) return;
-        if (!string.IsNullOrWhiteSpace(sectionName))
-            AppendLine(indention, $"{sectionName}:");
+
         if (typeof(T) == typeof(object))
         {
             items.Keys.ToList().ForEach(t =>
@@ -67,9 +66,9 @@ public class AdoYamlBuilder
                 if (obj is null)
                     obj = new AdoObject<T>(items[t]);
                 var serializer = new AdoObjectSerializer();
-                var s = serializer.Serialize(obj, indention);
+                var s = serializer.Serialize(obj, 0);
                 AppendLine(indention + 2, $"{t}:");
-                AppendLine(indention + 2, s);
+                AppendLine(indention + 4, s);
             });
         }
         else

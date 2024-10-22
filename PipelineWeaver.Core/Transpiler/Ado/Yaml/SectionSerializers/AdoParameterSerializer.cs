@@ -19,9 +19,6 @@ public class AdoParameterSerializer : IAdoYamlSectionSerializer
             case AdoSectionCollection<AdoParameterBase> parameters:
                 AppendParameters(parameters);
                 break;
-            //case AdoSectionCollection<AdoTemplateParameterBase> templateParameters:
-            //AppendTemplateParameters(templateParameters, startingIndent);
-            //break;
             default:
                 throw new ArgumentException(nameof(section));
         }
@@ -72,93 +69,100 @@ public class AdoParameterSerializer : IAdoYamlSectionSerializer
 
     private void AppendStringParameter(AdoStringParameter parameter, int startingIndent)
     {
-        _builder.AppendLine(startingIndent, parameter.Name + ": " + parameter.Value);
+        if (parameter.ParameterType == AdoParameterType.Standard)
+        {
+            _builder.AppendLine(startingIndent, parameter.Name + ": " + parameter.ValueOrDefault);
+        }
+        else
+        {
+            _builder.AppendLine(startingIndent, "- name: " + parameter.Name);
+            _builder.AppendLine(startingIndent, "  type: string");
+            _builder.AppendLine(startingIndent, "  default: " + parameter.ValueOrDefault);
+        }
     }
 
     private void AppendBoolParameter(AdoBoolParameter parameter, int startingIndent)
     {
-        _builder.AppendLine(startingIndent, parameter.Name + ": " + parameter.Value);
+        if (parameter.ParameterType == AdoParameterType.Standard)
+        {
+            _builder.AppendLine(startingIndent, parameter.Name + ": " + parameter.ValueOrDefault);
+        }
+        else
+        {
+            _builder.AppendLine(startingIndent, "- name: " + parameter.Name);
+            _builder.AppendLine(startingIndent, "  type: boolean");
+            _builder.AppendLine(startingIndent, "  default: " + parameter.ValueOrDefault);
+        }
     }
 
     private void AppendArrayParameter<T>(AdoArrayParameter<T> parameter, int startingIndent)
     {
-        _builder.AppendArray(parameter.Name, startingIndent, parameter.Value);
+        if (parameter.ParameterType == AdoParameterType.Standard)
+        {
+            _builder.AppendArray(parameter.Name, startingIndent, parameter.ValueOrDefault);
+        }
+        else
+        {
+            _builder.AppendLine(startingIndent, "- name: " + parameter.Name);
+            _builder.AppendLine(startingIndent, "  type: object");
+            _builder.AppendArray("default", startingIndent + 2, parameter.ValueOrDefault);
+        }
     }
 
     private void AppendDictionaryParameter<T>(AdoDictionaryParameter<T> parameter, int startingIndent)
     {
-        _builder.AppendKeyValuePairs(parameter.Name, startingIndent, parameter.Value);
+        if (parameter.ParameterType == AdoParameterType.Standard)
+        {
+            _builder.AppendLine(startingIndent, parameter.Name + ":");
+            _builder.AppendKeyValuePairs(startingIndent, parameter.ValueOrDefault);
+        }
+        else
+        {
+            _builder.AppendLine(startingIndent, "- name: " + parameter.Name);
+            _builder.AppendLine(startingIndent, "  type: object");
+            _builder.AppendLine(startingIndent, "  default:");
+            _builder.AppendKeyValuePairs(startingIndent + 2, parameter.ValueOrDefault);
+        }
     }
 
     private void AppendObjectDictionaryParameter<T>(AdoDictionaryParameter<T> parameter, int startingIndent)
     {
         var newDict = new Dictionary<string, AdoObject<T>>();
-        foreach (var kvp in parameter.Value)
+        foreach (var kvp in parameter.ValueOrDefault!)
             newDict.Add(kvp.Key, new AdoObject<T>(kvp.Value));
-        _builder.AppendObjectKeyValuePairs<T>(parameter.Name, startingIndent, newDict);
+        if (parameter.ParameterType == AdoParameterType.Standard)
+        {
+            _builder.AppendObjectKeyValuePairs<T>(parameter.Name, startingIndent, newDict);
+        }
+        else
+        {
+            _builder.AppendLine(startingIndent, "- name: " + parameter.Name);
+            _builder.AppendLine(startingIndent, "  type: object");
+            _builder.AppendObjectKeyValuePairs<T>("default", startingIndent + 2, newDict);
+        }
     }
 
     public void AppendObjectParameter<T>(AdoObjectParameter<T> parameter, int startingIndent)
     {
-        if (parameter.Value is null) return;
-
-        _builder.AppendLine(startingIndent, parameter.Name + ":");
+        if (parameter.ValueOrDefault is null) return;
         var serializer = new AdoObjectSerializer();
-        var s = serializer.Serialize(new AdoObject<T>(parameter.Value), startingIndent);
-        _builder.AppendLine(startingIndent, s);
-    }
+        var s = serializer.Serialize(new AdoObject<T>(parameter.ValueOrDefault), startingIndent);
 
-    /* internal void AppendTemplateParameters(AdoSectionCollection<AdoTemplateParameterBase> parameters, int startingIndent)
-    {
-        _builder.AppendLine(startingIndent, "parameters:");
-        foreach (var p in parameters)
+        if (parameter.ParameterType == AdoParameterType.Standard)
         {
-            var type = p.GetType();
-            if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(AdoObjectTemplateParameter<>))
-                typeof(AdoParameterSerializer).CallGenericMethod(this, methodName: nameof(AppendObjectTemplateParameter), genericType: type, parameters: [p, startingIndent + 2]);
-            else
-            {
-                switch (p)
-                {
-                    case AdoStringTemplateParameter parameter:
-                        AppendStringTemplateParameter(parameter, startingIndent + 2);
-                        break;
-                    case AdoBoolTemplateParameter parameter:
-                        AppendBoolTemplateParameter(parameter, startingIndent + 2);
-                        break;
-                    default:
-                        throw new ArgumentException(nameof(p));
-                }
-            }
+            _builder.AppendLine(startingIndent, parameter.Name + ":");
+            _builder.AppendLine(startingIndent, s);
         }
-    } */
-
-    /* private void AppendStringTemplateParameter(AdoStringTemplateParameter parameter, int startingIndent)
-    {
-        _builder.AppendLine(startingIndent, $"- name: {parameter.Name}");
-        _builder.AppendLine(startingIndent + 2, $"type: string");
-        if (!string.IsNullOrWhiteSpace(parameter.Default))
-            _builder.AppendLine(startingIndent + 2, $"default: {parameter.Default}");
-    }
-
-    private void AppendBoolTemplateParameter(AdoBoolTemplateParameter parameter, int startingIndent)
-    {
-        _builder.AppendLine(startingIndent, $"- name: {parameter.Name}");
-        _builder.AppendLine(startingIndent + 2, $"type: bool");
-        if (parameter.Default != null)
-            _builder.AppendLine(startingIndent + 2, $"default: {parameter.Default}");
-    }
-
-    private void AppendObjectTemplateParameter<T>(AdoObjectTemplateParameter<T> parameter, int startingIndent)
-    {
-        _builder.AppendLine(startingIndent, $"- name: {parameter.Name}");
-        _builder.AppendLine(startingIndent + 2, $"type: object");
-        if (parameter.Default != null)
+        else
         {
-            _builder.AppendLine(startingIndent + 2, $"default:");
-            _builder.Append(startingIndent + 4, parameter.Default);
+            _builder.AppendLine(startingIndent, "- name: " + parameter.Name);
+            _builder.AppendLine(startingIndent, "  type: object");
+            _builder.AppendLine(startingIndent, "  default:");
+            _builder.AppendLine(startingIndent + 2, s);
         }
-    } */
+
+
+    }
 }
 
 

@@ -46,7 +46,7 @@ public class AdoObjectSerializer
         switch (obj)
         {
             case AdoObject<Dictionary<string, string>> dict:
-                innerDoc.AppendKeyValuePairs(null, startingIndent, dict.Value);
+                innerDoc.AppendKeyValuePairs(startingIndent, dict.Value);
                 break;
             case AdoObject<List<string>> list:
                 innerDoc.AppendArray(null, startingIndent, list.Value?.ToArray());
