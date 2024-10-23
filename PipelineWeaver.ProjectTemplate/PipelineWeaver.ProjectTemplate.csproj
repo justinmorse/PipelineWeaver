@@ -1,0 +1,30 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include=".template.config/template.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Pipelines/" />
+    <Folder Include="Scripts/" />
+    <Folder Include="Templates/" />
+    <Folder Include="Templates/Jobs/" />
+    <Folder Include="Templates/Steps/" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PipelineWeaver.Ado\PipelineWeaver.Ado.csproj" />
+    <ProjectReference Include="..\PipelineWeaver.Core\PipelineWeaver.Core.csproj" />
+  </ItemGroup>
+
+  <Target Name="RunAfterBuild" AfterTargets="Build">
+    <Exec Command="dotnet PipelineWeaver.BuildHook.dll" WorkingDirectory="$(OutDir)" />
+  </Target>
+
+</Project>

@@ -22,9 +22,12 @@ public class AdoPipelineSerializer : IAdoYamlSectionSerializer
 
     private void AppendPool(AdoPipeline pipeline, int startingIndent)
     {
-        if (!string.IsNullOrWhiteSpace(pipeline.Pool))
+        if (pipeline.Pool?.Count > 0)
         {
-            _builder.AppendLine(startingIndent, $"pool: {pipeline.Pool}");
+            if (pipeline.Pool.Count > 1)
+                throw new Exception("Multiple pools not supported");
+            _builder.AppendLine(startingIndent, "pool:");
+            _builder.Append(startingIndent, pipeline.Pool);
             _builder.AppendEmptyLine();
         }
     }
