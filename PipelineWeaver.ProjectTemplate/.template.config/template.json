@@ -4,11 +4,16 @@
     "identity": "PipelineWeaver",
     "name": "PipelineWeaver",
     "shortName": "PipelineWeaver",
-    "sourceName": "PipelineWeaver",
+    "sourceName": "PipelineWeaver.ProjectTemplate",
+    "description": "Template for creating new ADO pipelines using PipelineWeaver.",
     "tags": {
         "language": "C#",
         "type": "project"
     },
+    "classifications": [
+        "PipelineWeaver",
+        "ADO"
+    ],
     "symbols": {
         "skipRestore": {
             "type": "parameter",

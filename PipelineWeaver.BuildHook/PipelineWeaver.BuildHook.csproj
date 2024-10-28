@@ -6,9 +6,17 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <PublishSingleFile>true</PublishSingleFile>
-    <!-- <SelfContained>true</SelfContained> -->
+    <SelfContained>true</SelfContained>
     <RuntimeIdentifier>linux-x64</RuntimeIdentifier>
     <DebugType>embedded</DebugType>
   </PropertyGroup>
+
+<Target Name="CopyDllToOutput" AfterTargets="Build">
+    <Copy SourceFiles="$(OutDir)PipelineWeaver.BuildHook.dll" 
+      DestinationFolder="$(SolutionDir)PipelineWeaver.ProjectTemplate/lib/"
+      OverwriteReadOnlyFiles="true"
+      SkipUnchangedFiles="false"/>
+</Target>
+
 
 </Project>

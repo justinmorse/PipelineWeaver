@@ -399,3 +399,9 @@ FodyWeavers.xsd
 
 # General Notes
 Notes
+Pipelines5.Playground/Pipelines5.Playground.csproj
+Pipelines5.Playground/Pipelines/MyPipeline.cs
+Pipelines5.Playground/Scripts/MyScript.ps1
+Pipelines5.Playground/Templates/Jobs/MyJobTemplate.cs
+Pipelines5.Playground/Templates/Steps/MyStepTemplate.cs
+Pipelines5.Playground/lib/PipelineWeaver.BuildHook.dll
