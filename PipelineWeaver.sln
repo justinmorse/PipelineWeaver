@@ -18,8 +18,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PipelineWeaver.ProjectTempl
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PipelineWeaver.BuildHook", "PipelineWeaver.BuildHook\PipelineWeaver.BuildHook.csproj", "{2A9597BA-6C83-4A48-B4EC-ED9840F15784}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pipelines5.Playground", "Pipelines5.Playground\Pipelines5.Playground.csproj", "{247A8875-9579-403E-B5BA-75B01ACD3BA0}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -46,10 +44,6 @@ Global
 		{2A9597BA-6C83-4A48-B4EC-ED9840F15784}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2A9597BA-6C83-4A48-B4EC-ED9840F15784}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2A9597BA-6C83-4A48-B4EC-ED9840F15784}.Release|Any CPU.Build.0 = Release|Any CPU
-		{247A8875-9579-403E-B5BA-75B01ACD3BA0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{247A8875-9579-403E-B5BA-75B01ACD3BA0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{247A8875-9579-403E-B5BA-75B01ACD3BA0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{247A8875-9579-403E-B5BA-75B01ACD3BA0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

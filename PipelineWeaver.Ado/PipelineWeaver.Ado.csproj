@@ -10,8 +10,4 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\PipelineWeaver.BuildHook\PipelineWeaver.BuildHook.csproj" />
-  </ItemGroup>
-
 </Project>

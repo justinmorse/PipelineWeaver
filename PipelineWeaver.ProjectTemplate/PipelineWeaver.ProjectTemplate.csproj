@@ -15,8 +15,12 @@
     <Folder Include="lib/" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="PipelineWeaver.BuildHook" Version="0.0.1" />
+  </ItemGroup>
+
   <Target Name="RunAfterBuild" AfterTargets="Build">
-    <Exec Command="dotnet $(ProjectDir)lib/PipelineWeaver.BuildHook.dll" WorkingDirectory="$(OutDir)" />
+    <Exec Command="dotnet $(ProjectDir)$(OutDir)PipelineWeaver.BuildHook" />
   </Target>
 
 </Project>
