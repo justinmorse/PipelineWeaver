@@ -1,37 +1,28 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <ItemGroup>
-    <ProjectReference Include="..\PipelineWeaver.Core\PipelineWeaver.Core.csproj" />
     <ProjectReference Include="..\PipelineWeaver.Ado\PipelineWeaver.Ado.csproj" />
+    <ProjectReference Include="..\PipelineWeaver.Core\PipelineWeaver.Core.csproj" />
   </ItemGroup>
-
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <!-- <PublishSingleFile>true</PublishSingleFile>
-    <SelfContained>true</SelfContained>
-    <RuntimeIdentifier>linux-x64</RuntimeIdentifier> -->
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <DebugType>embedded</DebugType>
-    <PackageId>PipelineWeaver.BuildHook</PackageId>
-    <Version>0.0.1</Version>
-    <Authors>PipelineWeaver</Authors>
-    <Company>PipelineWeaver</Company>
+    <!-- <PublishSingleFile>false</PublishSingleFile> -->
+    <!-- <SelfContained>false</SelfContained> -->
+    <!-- <RuntimeIdentifier>linux-x64</RuntimeIdentifier> -->
+    <!-- <DebugType>embedded</DebugType> -->
+    <!-- <PackageVersion>0.0.1</PackageVersion> -->
   </PropertyGroup>
 
-  <Target Name="PublishNuGetLocally" AfterTargets="Build">
-    <Exec Command="echo 'Packing'"/>
-    <Exec Command="dotnet pack $(ProjectPath)"/>
-    <Exec Command="echo 'Deleting old package'"/>
-    <Exec Command="dotnet nuget delete --source ~/Repos/PipelineWeaver/packages $(PackageId) $(PackageVersion) --non-interactive" ContinueOnError="WarnAndContinue"/>
-    <Exec Command="echo 'Pushing new package'"/>
-    <Exec Command="dotnet nuget push --source ~/Repos/PipelineWeaver/packages $(ProjectDir)bin\$(ConfigurationName)\$(PackageId).$(PackageVersion).nupkg" />
+  <PropertyGroup>
+    <SolutionDir Condition="'$(SolutionDir)' == ''">$(MSBuildProjectDirectory)\..\</SolutionDir>
+  </PropertyGroup>
+
+  <Target Name="CopyOutputToTemplateDirectory" AfterTargets="Build">
+    <ItemGroup>
+      <FilesToCopy Include="$(OutputPath)**\*.*" />
+    </ItemGroup>
+    <Copy SourceFiles="@(FilesToCopy)" DestinationFolder="$(SolutionDir)PipelineWeaver.ProjectTemplate\lib" />
   </Target>
-<!-- <Target Name="CopyDllToOutput" AfterTargets="Publish">
-    <Copy SourceFiles="$(PublishDir)PipelineWeaver.BuildHook" DestinationFolder="$(ProjectDir)../PipelineWeaver.ProjectTemplate/lib/" OverwriteReadOnlyFiles="true" SkipUnchangedFiles="false" />
-</Target> -->
-
-
 </Project>

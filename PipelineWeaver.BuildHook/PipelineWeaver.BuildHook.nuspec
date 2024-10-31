@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>PipelineWeaver.BuildHook</id>
+    <version>0.0.1</version> 
+    <title>PipelineWeaver.BuildHook</title>
+    <authors>PipelineWeaver</authors>
+    <owners>PipelineWeaver</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>PipelineWeaver</description>
+    <releaseNotes></releaseNotes>
+    <copyright>Copyright 2024</copyright>
+    <tags>ADO PipelineWeaver</tags>
+  </metadata>
+  <files>
+    <file src="bin\Debug\net8.0\*.dll" target="/" />
+    <file src="bin\Debug\net8.0\*.json" target="/" />
+    <file src="bin\Debug\net8.0\PipelineWeaver.BuildHook" target="/"/>
+  </files>
+</package>
