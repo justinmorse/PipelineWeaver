@@ -7,8 +7,8 @@ namespace PipelineWeaver.Core.Transpiler.Ado.Yaml.SectionSerializers;
 
 public class AdoPipelineSerializer : IAdoYamlSectionSerializer
 {
-    internal AdoYamlBuilder _builder = new AdoYamlBuilder();
-    public void AppendSection(AdoSectionBase section, AdoYamlBuilder builder, int startingIndent)
+    private AdoYamlBuilder _builder = new AdoYamlBuilder();
+    public void AppendSection(AdoSectionBase section, AdoYamlBuilder builder, int startingIndent, bool includeHeader = true)
     {
         var pipeline = section as AdoPipeline ?? throw new ArgumentException(nameof(section));
         _builder = builder;
@@ -27,7 +27,7 @@ public class AdoPipelineSerializer : IAdoYamlSectionSerializer
             if (pipeline.Pool.Count > 1)
                 throw new Exception("Multiple pools not supported");
             _builder.AppendLine(startingIndent, "pool:");
-            _builder.Append(startingIndent, pipeline.Pool);
+            _builder.Append(startingIndent, pipeline.Pool, includeHeader: false);
             _builder.AppendEmptyLine();
         }
     }

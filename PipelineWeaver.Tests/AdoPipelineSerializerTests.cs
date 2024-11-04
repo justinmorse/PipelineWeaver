@@ -1,4 +1,3 @@
-using System;
 using PipelineWeaver.Ado;
 using PipelineWeaver.Core.Transpiler.Yaml;
 
@@ -13,9 +12,9 @@ public class AdoPipelineSerializerTests
         var expected = File.ReadAllText("basic-pipeline.yaml");
         var variables = new AdoSectionCollection<IAdoVariable>()
         {
-            new AdoNameVariable{Name = "nameName",Value = "namevalue"},
-            new AdoGroupVariable{Group = "groupvalue"},
-            new AdoTemplateVariable{Template = "templatevalue"}
+            new AdoNameVariable{Name = "nameName",Value = "nameValue"},
+            new AdoGroupVariable{Group = "groupValue"},
+            new AdoTemplateVariable{Template = "templateValue"}
         };
 
         var triggers = new AdoTriggerContainer()
@@ -35,7 +34,9 @@ public class AdoPipelineSerializerTests
             new AdoBuildResource(){Build = "Build",Connection = "Connection", Source = "Source", Trigger = true},
             new AdoRepositoryResource(){Repository = "Repository",Project = "Project",Type = "Type",Connection = "Connection",Source = "Source",Endpoint = "Endpoint"},
             new AdoPackageResource(){Package = "Package",Type = "Type",Connection = "Connection",Version = "Version",Tag = "Tag"},
-            new AdoPipelineResource(){Pipeline = "Pipeline",Connection = "Connection",Project = "Project",Source = "Source",Version = "Version",Branch = "Branch",Tags = new List<string>{"Tag1","Tag2"}}
+            new AdoPipelineResource(){Pipeline = "Pipeline",Connection = "Connection",Project = "Project",Source = "Source",Version = "Version",Branch = "Branch",Tags =
+                ["Tag1", "Tag2"]
+            }
         };
 
         var pools = new AdoSectionCollection<IAdoPool>()
@@ -76,11 +77,16 @@ public class AdoPipelineSerializerTests
 
         var jobSteps = new AdoSectionCollection<AdoStepBase>(){
             new AdoScriptStep(){Script = "Script"},
-            new AdoTemplateStep(){Template = "StepTemplate", Parameters = new AdoSectionCollection<AdoParameterBase>(){new AdoBoolParameter(){Name = "boolParamName", ValueOrDefault = true, ParameterType = AdoParameterType.Standard}}},
+            new AdoTemplateStep(){Template = "StepTemplate", Parameters =
+                [
+                    new AdoBoolParameter()
+                        { Name = "boolParamName", ValueOrDefault = true, ParameterType = AdoParameterType.Standard }
+                ]
+            },
         };
 
         var jobs = new AdoSectionCollection<AdoJobBase>(){
-            new AdoJob(){Job = "Job", Condition = "JobCondition", DependsOn = new List<string>(){"Depend1","Depend2"}, DisplayName = "DisplayName", Steps = jobSteps},
+            new AdoJob(){Job = "Job", Condition = "JobCondition", DependsOn = ["Depend1", "Depend2"], DisplayName = "DisplayName", Steps = jobSteps},
             new AdoTemplateJob(){Template = "JobTemplate", Condition = "JobTemplateCondition", Parameters = adoJobParameters },
         };
 
@@ -90,14 +96,15 @@ public class AdoPipelineSerializerTests
         };
         var stages = new AdoSectionCollection<AdoStageBase>()
         {
-            new AdoStage(){Stage = "Stage", Condition = "Condition", DependsOn = new List<string>(){"Depend1","Depend2"}, DisplayName = "DisplayName", IsSkippable = true, Jobs =  jobs, LockBehavior = "LockBehavior", TemplateContext = "TemplateContext", Trigger = "Trigger", Variables = new AdoSectionCollection<IAdoVariable>() { new AdoNameVariable() { Name = "Name", Value = "Value" } }, Pools = pools },
+            new AdoStage(){Stage = "Stage", Condition = "Condition", DependsOn = ["Depend1", "Depend2"], DisplayName = "DisplayName", IsSkippable = true, Jobs =  jobs, LockBehavior = "LockBehavior", TemplateContext = "TemplateContext", Trigger = "Trigger", Variables =
+                [new AdoNameVariable() { Name = "Name", Value = "Value" }], Pools = pools },
             new AdoStageTemplate(){Template = "StageTemplate", Condition = "StageTemplateCondition", Parameters = parameters}
         };
 
         var a = new AdoPipeline()
         {
             Name = "test",
-            Pool = "Pool",
+            Pool = [new AdoNamedPool() { Name = "Pool", Demands = ["Demand1", "Demand2"] }],
             Variables = variables,
             Triggers = triggers,
             Resources = resources,
@@ -106,6 +113,7 @@ public class AdoPipelineSerializerTests
 
         var doc = new AdoYamlDocument();
         doc.BuildPipeline(a);
+        doc.Save(Helpers.PATH);
         Assert.That(doc.Builder.ToString(), Is.EqualTo(expected));
     }
 }

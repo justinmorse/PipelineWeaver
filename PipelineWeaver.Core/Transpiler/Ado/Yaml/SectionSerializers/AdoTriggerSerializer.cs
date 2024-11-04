@@ -11,7 +11,7 @@ namespace PipelineWeaver.Core.Transpiler.Ado.Yaml.SectionSerializers
     public class AdoTriggerSerializer : IAdoYamlSectionSerializer
     {
         internal AdoYamlBuilder _builder = new AdoYamlBuilder();
-        public void AppendSection(AdoSectionBase section, AdoYamlBuilder builder, int startingIndent)
+        public void AppendSection(AdoSectionBase section, AdoYamlBuilder builder, int startingIndent, bool includeHeader = true)
         {
             var trigger = section as AdoTriggerContainer ?? throw new ArgumentException(nameof(section));
 

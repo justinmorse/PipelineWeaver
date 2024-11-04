@@ -1,11 +1,15 @@
 name: test
-pool: Pool
+pool:
+  name: Pool
+  demands:
+  - Demand1
+  - Demand2
 
 variables:
 - name: nameName
-  value: namevalue
-- group: groupvalue
-- template: templatevalue
+  value: nameValue
+- group: groupValue
+- template: templateValue
 
 triggers:
   batch: true

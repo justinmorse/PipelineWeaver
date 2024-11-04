@@ -10,11 +10,12 @@ namespace PipelineWeaver.Core.Transpiler.Ado.Yaml.SectionSerializers
 {
     public class AdoPoolSerializer : IAdoYamlSectionSerializer
     {
-        internal AdoYamlBuilder _builder = new AdoYamlBuilder();
-        public void AppendSection(AdoSectionBase section, AdoYamlBuilder builder, int startingIndent)
+        private readonly AdoYamlBuilder _builder = new AdoYamlBuilder();
+        private bool _includeHeader = true;
+        public void AppendSection(AdoSectionBase section, AdoYamlBuilder builder, int startingIndent, bool includeHeader = true)
         {
             var pool = section as AdoSectionCollection<IAdoPool> ?? throw new ArgumentException(nameof(section));
-
+            _includeHeader = includeHeader;
             AppendPools(pool);
 
             builder.AppendLine(startingIndent, _builder.ToString(), true, true);
@@ -24,7 +25,8 @@ namespace PipelineWeaver.Core.Transpiler.Ado.Yaml.SectionSerializers
         {
             if (pool.Count > 0)
             {
-                _builder.AppendLine(0, "pools:");
+                if(_includeHeader)
+                    _builder.AppendLine(0, "pools:");
                 pool.ToList().ForEach(p =>
                 {
                     switch (p)

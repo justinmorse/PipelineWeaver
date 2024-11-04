@@ -15,11 +15,11 @@ public class AdoYamlBuilder
     {
         _sb = new StringBuilder();
     }
-    public void Append(int startingIndent, AdoSectionBase? section)
+    public void Append(int startingIndent, AdoSectionBase? section, bool includeHeader = true)
     {
         if (section is null) return;
 
-        section.AppendSection(this, startingIndent);
+        section.AppendSection(this, startingIndent, includeHeader);
     }
 
     public void AppendLine(int indention, string? line, bool removeEmptyLines = false, bool removeTrailingNewline = false)
@@ -115,15 +115,15 @@ public class AdoYamlBuilder
 
 public static class AdoSerializerHelpers
 {
-    public static void AppendSection(this AdoSectionBase section, AdoYamlBuilder builder, int startingIndent, SerializationType type = SerializationType.Yaml)
+    public static void AppendSection(this AdoSectionBase section, AdoYamlBuilder builder, int startingIndent, bool includeHeader = true)
     {
 
-        if (type != SerializationType.Yaml)
-            throw new NotImplementedException();
+        // if (type != SerializationType.Yaml)
+        //     throw new NotImplementedException();
 
         var serializer = SectionSerializerFactory.GetSerializer(section);
         var innerBuilder = new AdoYamlBuilder();
-        serializer.AppendSection(section, innerBuilder, startingIndent);
+        serializer.AppendSection(section, innerBuilder, startingIndent, includeHeader);
         var serializedString = innerBuilder.ToString();
         builder.AppendLine(0, serializedString);
     }
