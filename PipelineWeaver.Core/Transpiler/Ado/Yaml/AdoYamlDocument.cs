@@ -26,6 +26,8 @@ public class AdoYamlDocument : IYamlDocument
 
     public void Save(string path)
     {
+        if(File.Exists(path))
+            File.Delete(path);
         File.WriteAllText(path, Builder.ToString());
     }
 }

@@ -14,7 +14,7 @@ namespace PipelineWeaver.Core.Transpiler.Ado.Yaml.SectionSerializers
         private bool _includeHeader = true;
         public void AppendSection(AdoSectionBase section, AdoYamlBuilder builder, int startingIndent, bool includeHeader = true)
         {
-            var pool = section as AdoSectionCollection<IAdoPool> ?? throw new ArgumentException(nameof(section));
+            var pool = section as AdoSectionCollection<IAdoPool> ?? throw new ArgumentException(null, nameof(section));
             _includeHeader = includeHeader;
             AppendPools(pool);
 
