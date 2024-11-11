@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <ItemGroup>
+        <ProjectReference Include="..\PipelineWeaver.Ado\PipelineWeaver.Ado.csproj" />
+        <ProjectReference Include="..\PipelineWeaver.Core\PipelineWeaver.Core.csproj" />
+    </ItemGroup>
+    
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <!--<PropertyGroup>
+        <SolutionDir Condition="'$(SolutionDir)' == ''">$(MSBuildProjectDirectory)\..\</SolutionDir>
+    </PropertyGroup>
+
+    <Target Name="CopyOutputToTemplateDirectory" AfterTargets="Build">
+        <ItemGroup>
+            <FilesToCopy Include="$(OutputPath)**\*.*" />
+        </ItemGroup>
+        <Copy SourceFiles="@(FilesToCopy)" DestinationFolder="$(SolutionDir)PipelineWeaver.Template\lib" />
+    </Target>-->
+</Project>

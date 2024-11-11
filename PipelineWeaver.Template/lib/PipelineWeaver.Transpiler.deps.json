@@ -1,0 +1,50 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v8.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v8.0": {
+      "PipelineWeaver.Transpiler/1.0.0": {
+        "dependencies": {
+          "PipelineWeaver.Ado": "1.0.0",
+          "PipelineWeaver.Core": "1.0.0"
+        },
+        "runtime": {
+          "PipelineWeaver.Transpiler.dll": {}
+        }
+      },
+      "PipelineWeaver.Ado/1.0.0": {
+        "runtime": {
+          "PipelineWeaver.Ado.dll": {}
+        }
+      },
+      "PipelineWeaver.Core/1.0.0": {
+        "dependencies": {
+          "PipelineWeaver.Ado": "1.0.0"
+        },
+        "runtime": {
+          "PipelineWeaver.Core.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "PipelineWeaver.Transpiler/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "PipelineWeaver.Ado/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "PipelineWeaver.Core/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}
