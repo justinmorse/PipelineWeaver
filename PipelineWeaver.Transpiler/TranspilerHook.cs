@@ -6,7 +6,7 @@ namespace PipelineWeaver.Transpiler;
 
 public class TranspilerHook
 {
-    public void Run()
+    public static void Run()
     {
         Console.WriteLine("Searching for Project Root");
         
@@ -40,9 +40,6 @@ public class TranspilerHook
                     var yamlDoc = new AdoYamlDocument();
                     yamlDoc.BuildPipeline(pipeline);
                     var fileName = $"{ToKebabCase(type.Name)}.yaml";
-                    /*var ns = type.Namespace;
-                    var pathParts = ns?.Split(".");
-                    var outPath = (pathParts ?? []).Aggregate(root, Path.Combine);*/
                     var yamlPath = Path.Combine(pipelinePath, fileName);
                     yamlDoc.Save(yamlPath);
 
@@ -53,9 +50,9 @@ public class TranspilerHook
             {
                 // Handle exceptions for types that cannot be loaded
                 Console.WriteLine($"Error loading types from {dllPath}: {ex.Message}");
-                foreach (Exception loaderEx in ex.LoaderExceptions)
+                foreach (var loaderEx in ex.LoaderExceptions)
                 {
-                    Console.WriteLine($"Loader exception: {loaderEx.Message}");
+                    Console.WriteLine($"Loader exception: {loaderEx?.Message}");
                 }
             }
             catch (Exception ex)
@@ -64,11 +61,11 @@ public class TranspilerHook
             }
         }
     }
-    
-    public static string FindProjectRoot()
+
+    private static string FindProjectRoot()
     {
         // Start from the directory where the DLL is running
-        string currentDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+        var currentDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
         
         // Traverse upwards until finding a directory that likely represents the project root
         while (currentDir != null && !Directory.GetFiles(currentDir, "*.csproj").Any())
@@ -79,7 +76,7 @@ public class TranspilerHook
         return currentDir ?? throw new Exception("Project root not found.");
     }
     
-    public static string ToKebabCase(string input)
+    private static string ToKebabCase(string input)
     {
         if (string.IsNullOrEmpty(input))
             return input;
@@ -89,7 +86,7 @@ public class TranspilerHook
         {
             char c = input[i];
 
-            // If it's uppercase and it's not the first character, add a hyphen before it
+            // If it's uppercase, and it's not the first character, add a hyphen before it
             if (char.IsUpper(c) && i > 0)
             {
                 builder.Append('-');
