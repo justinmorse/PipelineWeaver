@@ -8,44 +8,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Reference Include="PipelineWeaver.Ado">
-            <HintPath>./lib/PipelineWeaver.Ado.dll</HintPath>
-        </Reference>
-        <Reference Include="PipelineWeaver.Core">
-            <HintPath>./lib/PipelineWeaver.Core.dll</HintPath>
-        </Reference>
-        <Reference Include="PipelineWeaver.Transpiler">
-            <HintPath>./lib/PipelineWeaver.Transpiler.dll</HintPath>
-        </Reference>
-    </ItemGroup>
-
-    <ItemGroup>
-        <None Update="lib\PipelineWeaver.BuildHook">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
-        <None Update="lib\PipelineWeaver.Ado.dll">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
-        <None Update="lib\PipelineWeaver.Ado.pdb">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
-        <None Update="lib\PipelineWeaver.BuildHook.dll">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
-        <None Update="lib\PipelineWeaver.BuildHook.pdb">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
-        <None Update="lib\PipelineWeaver.BuildHook.deps.json">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
-        <None Update="lib\PipelineWeaver.BuildHook.runtimeconfig.json">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
-        <None Update="lib\PipelineWeaver.Core.dll">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
-        <None Update="lib\PipelineWeaver.Core.pdb">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
+      <Reference Include="PipelineWeaver.Ado">
+        <HintPath>lib\PipelineWeaver.Ado.dll</HintPath>
+      </Reference>
+      <Reference Include="PipelineWeaver.AdoTranspilerClient">
+        <HintPath>lib\PipelineWeaver.AdoTranspilerClient.dll</HintPath>
+      </Reference>
     </ItemGroup>
 </Project>

@@ -2,9 +2,9 @@ using System.Reflection;
 using PipelineWeaver.Ado;
 using PipelineWeaver.Core.Transpiler.Yaml;
 
-namespace PipelineWeaver.Transpiler;
+namespace PipelineWeaver.AdoTranspilerClient;
 
-public class TranspilerHook
+public class TranspilerClient
 {
     public static void Run()
     {

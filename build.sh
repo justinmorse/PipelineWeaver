@@ -17,16 +17,17 @@ if [ $? -ne 0 ]; then
 fi
 
 printf "\n\n"
-echo Build PipelineWeaver.Transpiler project
-dotnet build ./PipelineWeaver.Transpiler/PipelineWeaver.Transpiler.csproj
+echo Build PipelineWeaver.AdoTranspilerClient project
+dotnet build ./PipelineWeaver.AdoTranspilerClient/PipelineWeaver.AdoTranspilerClient.csproj
 if [ $? -ne 0 ]; then
-    echo "Release build failed for PipelineWeaver.Transpiler"
+    echo "Release build failed for PipelineWeaver.AdoTranspilerClient"
     exit 1
 fi
 
 printf "\n\n"
 echo Copy Transpiler artifacts to template
-cp -rf ./PipelineWeaver.Transpiler/bin/Debug/net8.0/*.* ./PipelineWeaver.Template/lib
+cp -rf ./PipelineWeaver.AdoTranspilerClient/bin/Debug/net8.0/PipelineWeaver.AdoTranspilerClient.dll ./PipelineWeaver.Template/lib
+cp -rf ./PipelineWeaver.AdoTranspilerClient/bin/Debug/net8.0/PipelineWeaver.Ado.dll ./PipelineWeaver.Template/lib
 
 printf "\n\n"
 echo Change directory to PipelineWeaver.Template
@@ -53,23 +54,25 @@ printf "\n\n"
 echo Go back to the root directory
 cd ..
 
-printf "\n\n"
-echo Step 7.5: Delete PipelineWeaver.Playground lib directory if it exists
 if [ -d "PipelineWeaver.Playground" ]; then
-    rm -rf PipelineWeaver.Playground/lib
-    echo "Deleted existing PipelineWeaver.Playground lib directory."
-fi
-
-printf "\n\n"
-echo Step 8: Copy Template lib to Playground
-cp -rf ./PipelineWeaver.Template/lib ./PipelineWeaver.Playground/lib
-
-printf "\n\n"
-echo Step 9: Build PipelineWeaver.Playground project
-dotnet build ./PipelineWeaver.Playground/PipelineWeaver.Playground.csproj
-if [ $? -ne 0 ]; then
-    echo "Release build failed for PipelineWeaver.Core"
-    exit 1
+    printf "\n\n"
+    echo Step 7.5: Delete PipelineWeaver.Playground lib directory if it exists
+    
+        rm -rf PipelineWeaver.Playground/lib
+        echo "Deleted existing PipelineWeaver.Playground lib directory."
+    
+    
+    printf "\n\n"
+    echo Step 8: Copy Template lib to Playground
+    cp -rf ./PipelineWeaver.Template/lib ./PipelineWeaver.Playground/lib
+    
+    printf "\n\n"
+    echo Step 9: Build PipelineWeaver.Playground project
+    dotnet build ./PipelineWeaver.Playground/PipelineWeaver.Playground.csproj
+    if [ $? -ne 0 ]; then
+        echo "Release build failed for PipelineWeaver.Core"
+        exit 1
+    fi
 fi
 
 echo Success!

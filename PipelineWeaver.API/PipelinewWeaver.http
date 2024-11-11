@@ -1,0 +1,6 @@
+@PipelineWeaver_HostAddress = http://localhost:5239
+
+GET {{PipelineWeaver_HostAddress}}/junk/
+Accept: application/json
+
+###
