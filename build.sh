@@ -17,8 +17,8 @@ if [ $? -ne 0 ]; then
 fi
 
 printf "\n\n"
-echo Build PipelineWeaver.AdoTranspilerClient project
-dotnet build ./PipelineWeaver.AdoTranspilerClient/PipelineWeaver.AdoTranspilerClient.csproj
+echo Build PipelineWeaver.AdoTranspiler project
+dotnet build ./PipelineWeaver.AdoTranspiler/PipelineWeaver.AdoTranspiler.csproj
 if [ $? -ne 0 ]; then
     echo "Release build failed for PipelineWeaver.AdoTranspilerClient"
     exit 1
@@ -26,8 +26,9 @@ fi
 
 printf "\n\n"
 echo Copy Transpiler artifacts to template
-cp -rf ./PipelineWeaver.AdoTranspilerClient/bin/Debug/net8.0/PipelineWeaver.AdoTranspilerClient.dll ./PipelineWeaver.Template/lib
-cp -rf ./PipelineWeaver.AdoTranspilerClient/bin/Debug/net8.0/PipelineWeaver.Ado.dll ./PipelineWeaver.Template/lib
+cp -rf ./PipelineWeaver.AdoTranspiler/bin/Debug/net8.0/PipelineWeaver.AdoTranspiler.dll ./PipelineWeaver.Template/lib
+cp -rf ./PipelineWeaver.AdoTranspiler/bin/Debug/net8.0/PipelineWeaver.Ado.dll ./PipelineWeaver.Template/lib
+cp -rf ./PipelineWeaver.AdoTranspiler/bin/Debug/net8.0/PipelineWeaver.Core.dll ./PipelineWeaver.Template/lib
 
 printf "\n\n"
 echo Change directory to PipelineWeaver.Template

@@ -11,8 +11,8 @@
       <Reference Include="PipelineWeaver.Ado">
         <HintPath>lib\PipelineWeaver.Ado.dll</HintPath>
       </Reference>
-      <Reference Include="PipelineWeaver.AdoTranspilerClient">
-        <HintPath>lib\PipelineWeaver.AdoTranspilerClient.dll</HintPath>
+      <Reference Include="PipelineWeaver.AdoTranspiler">
+        <HintPath>lib\PipelineWeaver.AdoTranspiler.dll</HintPath>
       </Reference>
     </ItemGroup>
 </Project>

@@ -1,5 +1,4 @@
-﻿using PipelineWeaver;
-using PipelineWeaver.AdoTranspilerClient;
+﻿using PipelineWeaver.Transpiler;
 
-Console.WriteLine("Running Client Hook");
-TranspilerClient.Run();
+Console.WriteLine("Running ADO transpiler");
+AdoTranspiler.Run();
