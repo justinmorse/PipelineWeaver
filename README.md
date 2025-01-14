@@ -1,9 +1,12 @@
 # PipelineWeaver
 
-##WARNING: THIS PROJECT IS IN A VERY ROUGH BEGINNING STAGE
-##USE AT YOUR OWN RISK
+## WARNING: THIS PROJECT IS IN A VERY ROUGH BEGINNING STAGE
+## USE AT YOUR OWN RISK
 
-###Getting Started
+### About
+PipelineWeaver is an attempt to create ADO YAML CI/CD pipelines in C# and serialize them to YAML. 
+
+### Getting Started
 1. Setting up the bash build script
 	1. Open build.sh
 	2. Replace NUGET_PUBLISH_PATH with your local path you'd like to use as the nuget repository
