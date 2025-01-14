@@ -1,10 +1,19 @@
 #!/bin/bash
 
+export NUGET_PUBLISH_PATH="/home/justin/Repos/packages"
 
 echo Build PipelineWeaver.Ado project
 dotnet build ./PipelineWeaver.Ado/PipelineWeaver.Ado.csproj
 if [ $? -ne 0 ]; then
     echo "Build failed for PipelineWeaver.Ado"
+    exit 1
+fi
+
+printf "\n\n"
+echo Publish PipelineWeaver.Ado nuget
+dotnet nuget push ./PipelineWeaver.Ado/bin/Debug/PipelineWeaver.Ado.1.0.0.nupkg --source $NUGET_PUBLISH_PATH
+if [ $? -ne 0 ]; then
+    echo "Nuget publish failed for PipelineWeaver.Ado"
     exit 1
 fi
 
@@ -17,18 +26,28 @@ if [ $? -ne 0 ]; then
 fi
 
 printf "\n\n"
-echo Build PipelineWeaver.AdoTranspiler project
-dotnet build ./PipelineWeaver.AdoTranspiler/PipelineWeaver.AdoTranspiler.csproj
+echo Publish PipelineWeaver.Core nuget
+dotnet nuget push ./PipelineWeaver.Core/bin/Debug/PipelineWeaver.Core.1.0.0.nupkg --source $NUGET_PUBLISH_PATH
 if [ $? -ne 0 ]; then
-    echo "Release build failed for PipelineWeaver.AdoTranspilerClient"
+    echo "Nuget publish failed for PipelineWeaver.Core"
     exit 1
 fi
 
 printf "\n\n"
-echo Copy Transpiler artifacts to template
-cp -rf ./PipelineWeaver.AdoTranspiler/bin/Debug/net8.0/PipelineWeaver.AdoTranspiler.dll ./PipelineWeaver.Template/lib
-cp -rf ./PipelineWeaver.AdoTranspiler/bin/Debug/net8.0/PipelineWeaver.Ado.dll ./PipelineWeaver.Template/lib
-cp -rf ./PipelineWeaver.AdoTranspiler/bin/Debug/net8.0/PipelineWeaver.Core.dll ./PipelineWeaver.Template/lib
+echo Build PipelineWeaver.AdoTranspiler project
+dotnet build ./PipelineWeaver.AdoTranspiler/PipelineWeaver.AdoTranspiler.csproj
+if [ $? -ne 0 ]; then
+    echo "Build failed for PipelineWeaver.AdoTranspiler"
+    exit 1
+fi
+
+printf "\n\n"
+echo Publish PipelineWeaver.AdoTranspiler nuget
+dotnet nuget push ./PipelineWeaver.AdoTranspiler/bin/Debug/PipelineWeaver.AdoTranspiler.1.0.0.nupkg --source $NUGET_PUBLISH_PATH
+if [ $? -ne 0 ]; then
+    echo "Nuget publish failed for PipelineWeaver.AdoTranspilerClient"
+    exit 1
+fi
 
 printf "\n\n"
 echo Change directory to PipelineWeaver.Template
@@ -57,21 +76,15 @@ cd ..
 
 if [ -d "PipelineWeaver.Playground" ]; then
     printf "\n\n"
-    echo Step 7.5: Delete PipelineWeaver.Playground lib directory if it exists
-    
-        rm -rf PipelineWeaver.Playground/lib
-        echo "Deleted existing PipelineWeaver.Playground lib directory."
-    
-    
-    printf "\n\n"
-    echo Step 8: Copy Template lib to Playground
-    cp -rf ./PipelineWeaver.Template/lib ./PipelineWeaver.Playground/lib
+    echo Step 8: Delete PipelineWaver nugets from global nuget cache
+    rm -rf ~/.nuget/packages/pipelineweaver.*
+    echo "Deleted existing PipelineWeaver nugets from global nuget cache"
     
     printf "\n\n"
     echo Step 9: Build PipelineWeaver.Playground project
     dotnet build ./PipelineWeaver.Playground/PipelineWeaver.Playground.csproj
     if [ $? -ne 0 ]; then
-        echo "Release build failed for PipelineWeaver.Core"
+        echo "Build failed for PipelineWeaver.Core"
         exit 1
     fi
 fi

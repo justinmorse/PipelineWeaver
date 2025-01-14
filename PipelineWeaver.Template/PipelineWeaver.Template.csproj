@@ -8,11 +8,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Reference Include="PipelineWeaver.Ado">
-        <HintPath>lib\PipelineWeaver.Ado.dll</HintPath>
-      </Reference>
-      <Reference Include="PipelineWeaver.AdoTranspiler">
-        <HintPath>lib\PipelineWeaver.AdoTranspiler.dll</HintPath>
-      </Reference>
+      <PackageReference Include="PipelineWeaver.AdoTranspiler" Version="1.0.0" />
     </ItemGroup>
 </Project>
